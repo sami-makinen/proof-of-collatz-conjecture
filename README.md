@@ -204,7 +204,27 @@ The result is even and can be shifted four times to get odd number = b1. Notice,
 
 d) f(b111) = 3 \* b111 + 1 = b10101 + 1 = b10110. 
 
-The result is even and can be shifted once to get odd number = b1011. From b), we notice that b011 is equal to b101 = b1 after one more step. Notice, if the pattern is b1?\*111, adding one will propagate toward HSB and must be resolved as well.
+The result is even and can be shifted once to get odd number n = b1011. The n can be split
+
+n = b1011 = b1000 + b011
+
+=> f(n) = 3n + 1 = 3 \* (b1000 + b011) + 1 
+
+= 3 \* b1000 + 3 \* b011 + 1 
+
+= 3 \* b1000 + f(b011)    | From b), we notice that f(b011) is equal to b101. 
+
+= 3 \* b1000 + b101 = b11101
+
+f(b11101) = 3 \* b11000 + 3 \* b101 + 1 
+
+= 3 \* b11000 + f(b101) 
+
+= 3 \* b11000 + b10000 = b101000
+
+Shifting b101000 will result to b101 and from c) we can conclude final result b1.
+
+Notice, if the pattern is b1?\*111, adding one will propagate toward HSB and must be resolved as well.
 
 Building the algorithm
 ----------------------
@@ -217,7 +237,7 @@ Let n be any positive natural number.
     // f(n) in case the n is even
     if( ! (n & 1) ) {
       n >>= 1; // div by 2
-      continue;
+      continue
     }
 
     // split n to first three bits and the rest
@@ -226,28 +246,28 @@ Let n be any positive natural number.
     if( a == b001 ) {
       // 3n + 1 = 3 * (n - a + a) + 1 = 3*r + 3a + 1
       // 3*r + 3* b001 + 1 = 3*r +  b011 + 1 = 3*r + b100
-      n = 3*r + b100;
+      n = 3*r + b100
       //n >>= 2; // optimization possible      
     }
     else if( a == b011 ) {
       // 3n + 1 = 3 * (n - a + a) + 1 = 3*r + 3a + 1
       // 3*r + 3 * b011 + 1 = 3*r + b1001 + 1 = 3*r + b1010
-      n = 3*r + b1010; // adding probagates
-      //n >>= 1; // optimization possible      
+      n = 3*r + b1010 // adding probagates
+      //n >>= 1 // optimization possible      
     }
     else if( a == b101 ) {
       // 3n + 1 = 3 * (n - a + a) + 1 = 3*r + 3a + 1
       // 3*r + 3* b101 + 1 = 3*r + b1111 + 1 = 3*r + b10000
       // b101 * 3 + 1 = b1111 + 1 = b10000. This is a hard case because, adding will probagate.
-      n = 3*r + b10000; // from probagation
+      n = 3*r + b10000 // from probagation
       // Notice, the n's three LSBs are 0, i.e. [?*]00b.
-      //n >>= 3; // optimization possible      
+      //n >>= 3 // optimization possible      
     }
     else if( a == b111) {
       // 3n + 1 = 3 * (n - a + a) + 1 = 3*r + 3a + 1
       // 3*r + 3* b111 + 1 = 3*r + b10101 + 1 = 3*r + b10110
-      n = 3*r + b10110; // from result. The adding probagates
-      //n >>= 1; // optimization possible      
+      n = 3*r + b10110 // from result. The adding probagates
+      //n >>= 1 // optimization possible      
     }
   }
 ```
@@ -256,28 +276,38 @@ Part 1 of the proof: Algorithm calculates f(n)
 -------------------------
 
 f(n) = n / 2, if n mod 2 == 0
+
 In lines xx-yy: If the given number n is even, the number is divided by two.
 
 f(n) = 3n+1, if n mod 2 == 1
+
 In lines xx-yy: n is split to higher and lower parts
 
 r is higher parts
+
 a is lower parts
+
 n = n - a + a
+
 r = n - a => n = r + a
+
 3n + 1 = 3 * (n - a + a) + 1 = 3 * (r + a) + 1 = 3r + 3a + 1
 
 In lines xx-yy: If a is 1 (b001)
-=> 3n + 1 = 3r + 3a + 1 = 3r + 3 + 1 = 3r + 4 (b100)
+
+=> 3n + 1 = 3r + 3a + 1 = 3r + 3 + 1 = 3r + 4 (4 is b100)
 
 In lines xx-yy: If a is 3 (b011)
-=> 3n + 1 = 3r + 3a + 1 = 3r + 9 + 1 = 3r + 10 (b1010)
+
+=> 3n + 1 = 3r + 3a + 1 = 3r + 9 + 1 = 3r + 10 (10 is b1010)
 
 In lines xx-yy: If a is 5 (b101)
-=> 3n + 1 = 3r + 3a + 1 = 3r + 15 + 1 = 3r + 16 (b10000)
+
+=> 3n + 1 = 3r + 3a + 1 = 3r + 15 + 1 = 3r + 16 (16 is b10000)
 
 In lines xx-yy: If a is 7 (b111)
-=> 3n + 1 = 3r + 3a + 1 = 3r + 21 + 1 = 3r + 22 (b10110)
+
+=> 3n + 1 = 3r + 3a + 1 = 3r + 21 + 1 = 3r + 22 (22 is b10110)
 
 Part 2 of the proof: The algorithm will stop when result is 1 for every n
 --------------------------------------------------------------------------
@@ -293,35 +323,61 @@ a) with a = b001, |f(f(3n+1))| = |n| + 1 - 2 = |n| - 1
 3n will increase the magnitude by one, but adding one does not. The addition will touch only the lowest three bits. Therefore, magnitude will remain the same or get smaller.
 
 Proof:
+
 n = b?\*001
+
+M = |b?\*001|
+
 Step 1: f(n) = f(b?\*001) = 3 * b?\*001 + 1
+
 = 3 * b?\*000 + b100
-= b?\*000 + b100               || M + 1
-= b?\*100                      || M + 0
-Step 2: f(b?\*100) = b?\*10     || M - 1
-Step 3: f(b?\*10) = b?\*1       || M - 1
-                               = M - 1
+
+= b?\*000 + b100               \|\| M + 1
+
+= b?\*100                      \|\| M + 0
+
+Step 2: f(b?\*100) = b?\*10     \|\| M - 1
+
+Step 3: f(b?\*10) = b?\*1       \|\| M - 1
+
+=> |f(b?\*001)| = |b?\*001| - 1
 
 b) with a = b011, |f(f(3n+1))| = |n| + 1 - 1 = |n|, if adding does not probagate. 
-The result is n = 3\*r + b1010. If fourth bit of the 3\*r is not set, the magnitude won't change.
+
+The result is n = 3\*r + b1010. If fourth bit of the 3\*r is not set, the magnitude won't change due adding 1.
 
 Proof:
+
 Let n = b?\*011
-    3r = b?\*0000 (4th bit not set after multiplication)
+
+3r = b?\*0000 (4th bit not set after multiplication)
+
 Step 1: f(n) = f(b?\*011) = b?\*011 * 3 + 1 = 3r + b011 + 1
+
 = b?\*0000 + b1010            || M + 1
+
 = b?\*1010                    || M + 0
+
 Step 2: f(b?\*1010) = b?\*101  || M - 1
-                              = M
+
+=> |f(f(b?\*011))| = |b?\*011|, if 3r = b?\*0000 in the first step.
+
 If the fourth bit of multiplication of r is set, the addition probagates and M increases only if all bits are set after the 3rd bit. In other words, the adding will increase M by 1, if 3r = b1\*000. 
 
 Proof:
+
 n = b?\*011
+
 3r = b1\*000
+
 Step 1: f(n) = f(b?\*011) = b?\*011 * 3 + 1 = 3r + b011 + 1
+
 = b1\*000 + b1010             || M + 1
+
 = b10\*010                    || M + 1
+
 Step 2: f(b10\*010) = b10\*01  || M - 1
+
 Step 3: see a)               || M - 1
 
 After division the result is b10\*001, and again this pattern leads to magnitude decrease due the a = b001.  The step 3 will result to same pattern b10\*001 but with one 0 less. This will repeat until the pattern is b101 which is shown to be 1 after some more iterations.
@@ -329,11 +385,15 @@ After division the result is b10\*001, and again this pattern leads to magnitude
 So, in case of a = b011 the magnitude of n will start decreasing after third iteration.
 
 c) with a = b101, |f(f(3n+1))| = |n| + 1 - 3 = |n| - 2
+
 The adding will increase magnitude, if r = b1\*000. This would lead to following pattern:
+
 b1\*000 + b10000 = 10\*
+
 After collapse the result is b1 and magnitude is 1.
 
 d) with a = b111, |f(f(3n+1))| = |n| + 1 - 1 = |n| 
+
 In case of a = b111, the result is n = 3\*r + b10110.
 
 d).a If the fifth bit of the 3\*r is not set, the magnitude won't change.
@@ -349,9 +409,13 @@ d).c By further investigation,
 d).c.i if ? = 0, then a = b011 and the fourth bit is not set, the magnitude won't change due the addition of a to 3r. Thus, the magnitude will remain the same. After this step pattern is:
 
   n = b10\*011
+
   3n + 1 = 3 * b10\*011 + 1
+
 => 3 \* b10\*000 + b10000
+
 => b110\*10000    || M + 1
+
 Collapse four times => b110\*1 || M - 4
 
 d).c.ii If ? = 1, then a = b111 and the fifth bit is not set, the magnitude won't change.
@@ -361,6 +425,7 @@ n = b10\*111
 If there is no 0s, n = b1111
 
 Let's demonstrate how the algorithm processes b1111:
+
 ```
 n       r           a      +
 b1111
