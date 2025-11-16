@@ -14,8 +14,14 @@ For on any natural number n > 0,
 
 Formally,
 
-f(n) = { n / 2, if n mod 2 == 0,
-         3n+1, if n mod 2 == 1 }
+```math 
+\[ f(n) =
+  \begin{cases}
+    n/2   & \quad \text{if } n \equiv 0 \pmod{2}\\
+    3n+1  & \quad \text{if } n \equiv 1 \pmod{2}
+  \end{cases}
+\]
+```
 
 When f(n) is applied to the result of previous f(n), i.e. f(f(n)) and continued repeatedly for any starting natural number n > 0, the sequence of operations will result to 1.
 
