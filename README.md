@@ -15,12 +15,11 @@ For on any natural number n > 0,
 Formally,
 
 ```math 
-\[ f(n) =
+ f(n) =
   \begin{cases}
     n/2   & \quad \text{if } n \equiv 0 \pmod{2}\\
     3n+1  & \quad \text{if } n \equiv 1 \pmod{2}
   \end{cases}
-\]
 ```
 
 When f(n) is applied to the result of previous f(n), i.e. f(f(n)) and continued repeatedly for any starting natural number n > 0, the sequence of operations will result to 1.
@@ -48,50 +47,68 @@ As a conclusion, the theorems form a proof of Collatz conjecture.
 About the notation
 ------------------
 
-A number presented in binary format is only 0s and 1s. Each bit n presents value $2^n$, n >= 0. If the bit is 0, the value of the bit is 0, otherwise $2^n$ where n is the position of the bit. The value is sum of the bit presentations. The rightmost bit at position 0 of the binary presentation is called lowest significant bit (LSB). The leftmost bit of the binary presentation is called highest significant (HSB) bit.
+A number presented in binary format is only 0s and 1s. Each bit n presents value $2^i$, i >= 0. If the bit is 0, the value of the bit is 0, otherwise $2^i$ where i is the position of the bit. The value is sum of the bit presentations. The rightmost bit at position 0 of the binary presentation is called lowest significant bit (LSB). The leftmost bit of the binary presentation is called highest significant (HSB) bit.
 
-In the paper the numbers are natual numbers N (> 0) and the binary presentation do not have a sign bit nor decimal fraction bits.
+In the paper the numbers are natural numbers $n \in N (> 0)$ and the binary presentation do not have a sign bit nor decimal fraction bits.
 
 To avoid confusion between different bases the binary number is prefixed with a b. For example b11 is three while 11 is eleven.
 
-If binary number is odd, the LSB is one. If the LSB is 0, the number is even. The LSB presents 1 if the bit is set. The other bits present even values $2^n$ (n > 0).
+If binary number is odd, the LSB is one. If the LSB is 0, the number is even. The LSB presents 1 if the bit is set. The other bits present even values $2^i (i > 0)$.
 
-The special symbol * is used to present 0 or more bits in sequence. Thus, 1* is sequence of zero or more ones.
+The special symbol \* is used to present 0 or more bits in sequence. Thus, 1\* is sequence of zero or more ones.
 
 The 01\* presents a sequence of bits where the 0 is followed by zero or more number of 1-bits. Similarly, 10\* presents a sequence of bits where the 1 is followed any number of 0-bits. The special symbol ? is used when the bit value is unknown. The ? can be either 0 or 1. The ?\* is sequence of any bits and has length of 0 or more.
 
-If 0 is added to ? the result is ?.
-If 1 is added to ? the result is 10\*, because if ? is 0, the result is 1 and, if ? is 1, the result is 10.
-If ? is added to ? the result is ?\*, because the choices are: 0+0 = 0, 0+1 = 1, 1+0=1, 1+1=10.
-If 0 is added to 01\* the result is 01\*.
-If 1 is added to 01\* the result is 10\*.
-If 0 is added to 10\* the result is 10\*.
-If 1 is added to 10\* the result is 10\*1.
+If 0 is added to ? the result is ?.  
+
+If 1 is added to ? the result is 10\*, because if ? is 0, the result is 1 and, if ? is 1, the result is 10.  
+
+If ? is added to ? the result is ?\*, because the choices are: 0+0 = 0, 0+1 = 1, 1+0=1, 1+1=10.  
+
+If 0 is added to 01\* the result is 01\*.  
+
+If 1 is added to 01\* the result is 10\*.  
+
+If 0 is added to 10\* the result is 10\*.  
+
+If 1 is added to 10\* the result is 10\*1.  
+
 if ? is added to 1\*, the result is 1\*?.
 
-If 0, 1 or ?\* is added to ?\*, the result is ?\*.
-The adding of 0 won't change the binary sequence.
-The adding of 1 will change the binary sequence but because we don't know how, the result is ?\*.
+If 0, 1 or ? is added to ?\*, the result is ?\*. The adding of 0 won't change the binary sequence. The adding of 1 will change the binary sequence but because we don't know how, the result is ?\*.
 
 The notation n >> x means that the bits of n are shifted to the right x times. This is equal to division of n by $2^x$.
+
 n >> x = n / $2^x$
 
 Some remarks about division by two (shifting to the right by 1). Notice: this would lead to rounding down, if pattern presents odd number.
+
 b1 >> 1 = b0
-b1\* >> 1 = b1\*   
+
+b1\* >> 1 = b1\*
+
 b1\*0 >> 1 = b1\*
+
 b? >> 1 = b0
+
 b?\* >> 1 = b?\*
+
 b?0 >> 1 = b?
+
 b?\*0 >> 1 = b?\*
 
 The notation n << x means that the bits of n are shifted to the left x times. This is equal to multiplication of n by $2^x$.
+
 n << x = n \* $2^x$
 
 Some remarks about multiplication by two (shifting to the left by 1).
+
 b1 << 1 = b10
+
 b1\* << 1 = b1\*0.
+
 b? << 1 = ?0.
+
 b?\* << 1 = ?\*0.
 
 The minimum length of the bit string needed to present a number in binary presentation is called magnitude of the binary number and marked with M. The right-most 0s are ignored when calculating the
@@ -100,13 +117,21 @@ magnitude. Thus, b000100 magnitude is 3 because the right-most three zeros are i
 The magnitude M of bit string n is |n|. Simply, M = |n| Some rules about magnitude of n:
 
 |0| = 0
+
 |1| = 1
+
 |?| = 0 or 1
+
 |0\*| = 0
+
 |10\*| >= 1
+
 |1\*| >= 0
+
 |1?\*| >= 1
+
 |1?\* << 1| = |1?\*| + 1
+
 |1?\* >> 1| = |1?\*| - 1
 
 Insights of calculating f(n) with binary operations
@@ -116,7 +141,7 @@ The multiplication of binary number by two is equal to shifting the bits to the 
 significant bit. If the binary number is odd, then the division by two will be rounded down to closest natural number. In the Collatz sequence the division by two will occur only to even numbers, so there
 will be no rounding down.
 
-Corollary: The 3n will result to odd number, if the n is odd. This can be easily proved using binary numbers.
+**Corollary:** The 3n will result to odd number, if the n is odd. This can be easily proved using binary numbers.
 
   3n <=> 2n + n
 
@@ -126,16 +151,23 @@ Let a be the binary pattern of n. Because n is odd the LSB is 1.
 
 2n will result to ba0 = b?\*10, because of the shift left. By adding n will result to ?\*1, because LSB is set in n.
 
- ?\*10
-+ ?\*1
-  ----
-  ?\*1
+```math
+\begin{equation}
+\frac{
+    \begin{array}[b]{r}
+      \left( ?^*1 0 \right) \\
+      +  \left( ?^* 1 \right) 
+    \end{array}
+  }{
+    \left( ?^* 1 \right)
+  }
+\end{equation}
+```
 
 The algorithm
 -------------
 
-The algorithm treats even numbers by dividing the number by two as in f(n). If the result of division is still even, we continue dividing as long the result is not even. We say the result is collapsed to even
-and use notation C(n) where pattern of n is 1?\*10\*. After C(n) = C(1?\*10\*) = 1?\*1
+The algorithm treats even numbers by dividing the number by two as in f(n). If the result of division is still even, we continue dividing as long the result is not even. We say the result is collapsed to even and use notation C(n) where pattern of n is 1?\*10\*. After C(n) = C(1?\*10\*) = 1?\*1
 
 If the number is odd, the algorithm uses different step depending on the three lowest significant bits.  The three lowest bits are examined because we want to know whether the result is even or odd and, if the
 result can be collapsed. If the LSB is 1, the result is odd. If the LSB is 0, the result is even and can be divided by two.
@@ -151,22 +183,28 @@ Let's check what happens to these when f(n) is applied to them.
 
 a) The algorithm will halt for the result being one. Let's check still what happens to b001, if f(n) is applied to it:
 
-3 \* b001 + 1 = b011 + 1 = b100. The result is even and can be shifted twice to get odd number b1. In other words, to result is same.
+f(b001) = 3 \* b001 + 1 = b011 + 1 = b100. 
+
+The result is even and can be shifted twice to get odd number b1. In other words, to result is same.
 
 If applied to a pattern of b1?\*001, the result would be
 
-3 \* b1?\*000 + b100 = b110?\*100
+f(b1?\*001) = 3 \* b1?\*000 + b100 = b110?\*100
 
-and next step would collapse it to b110?\*1.
+and next steps would collapse it to b110?\*1. Then algorithm would pick one of a)-d) depending on last three bits b??1.
 
-b) 3 \* b011 + 1 = b1001 + 1 = b1010. The result is even and can be shifted once to get odd number b101.
-From c), we can see that b101 applying f(n) to it will result to b1.
+b) f(b011) = 3 \* b011 + 1 = b1001 + 1 = b1010. 
+
+The result is even and can be shifted once to get odd number b101. From c), we can see that b101 applying f(n) to it will result to b1.
 Notice, if the pattern is b1?\*011, adding one will propagate toward HSB and must be resolved as well.
 
-c) 3 \* b101 + 1 = b1111 + 1 = b10000. The result is even and can be shifted four times to get odd number = b1. Notice, if the pattern is b1?\*101, adding one will propagate toward HSB and must be resolved as
-well.
+c) f(b101) = 3 \* b101 + 1 = b1111 + 1 = b10000. 
 
-d) 3 \* b111 + 1 = b10101 + 1 = b10110. The result is even and can be shifted once to get odd number = b1011. From b), we notice that b011 is equal to b101 = b1 after one more step. Notice, if the pattern is b1?\*111, adding one will propagate toward HSB and must be resolved as well.
+The result is even and can be shifted four times to get odd number = b1. Notice, if the pattern is b1?\*101, adding one will propagate toward HSB and must be resolved as well.
+
+d) f(b111) = 3 \* b111 + 1 = b10101 + 1 = b10110. 
+
+The result is even and can be shifted once to get odd number = b1011. From b), we notice that b011 is equal to b101 = b1 after one more step. Notice, if the pattern is b1?\*111, adding one will propagate toward HSB and must be resolved as well.
 
 Building the algorithm
 ----------------------
