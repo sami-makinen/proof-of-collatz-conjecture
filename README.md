@@ -339,11 +339,11 @@ When algorithm calculates and sets n=f(n), the magnitude of n changes in every l
 
 a) with a = b001, 
 
-`|f(f(3n+1))| = |n| + 1 - 2 = |n| - 1`
-
-3n will increase the magnitude by one, but adding one does not. The addition will touch only the lowest three bits. Therefore, magnitude will remain the same or get smaller.
+**Lemma**: |f(f(f(n)))| = |n| - 1, if n=b?\*001 
 
 Proof:
+
+3\*n will increase the magnitude by one, but adding one does not. The addition will touch only the lowest three bits. Therefore, magnitude will remain the same or get smaller.
 
 ```
 n = b?*001
@@ -367,42 +367,18 @@ Step 3:
 
 ```
 f(b?*10) = b?*1               || M - 1
-=> |f(b?*001)| = |b?*001| - 1
+=> |f(f(f(b?*001)))| = |b?*001| - 1
 ```
 
-b) with a = b011, 
+b) with a = b011, there is two scenarios to be considered. Whether the addition of one in f(n) does increase the magnitude b.i) or does increases the magnitude b.ii).
 
-`|f(f(3n+1))| = |n| + 1 - 1 = |n|, if adding does not probagate.`
+b.i) The case when the addition of one increases the magnitude:
 
-The result is `n = 3*r + b1010`. If fourth bit of the 3\*r is not set, the magnitude won't change due adding 1.
+**Lemma**: If the fourth bit of the result of multiplication of r is set, the addition propagates and M increases only if all bits are set after the 3rd bit.  
 
 Proof:
 
-Let 
-
-```
-n = b?*011
-3r = b?*0000   || 4th bit not set after multiplication`
-```
-
-Step 1: 
-
-```
-f(n) = f(b?*011) = b?*011 * 3 + 1 = 3r + b011 + 1
-= b?*0000 + b1010            || M + 1
-= b?*1010                    || M + 0
-```
-
-Step 2:  
-
-```
-f(b?*1010) = b?*101         || M - 1
-=> |f(f(b?*011))| = |b?*011|, if 3r = b?*0000 in the first step.
-```
-
-If the fourth bit of multiplication of r is set, the addition probagates and M increases only if all bits are set after the 3rd bit. In other words, the adding will increase M by 1, if 3r = b1\*000. 
-
-Proof:
+In other words, the addition of one increases M by 1, if 3r = b1\*000.
 
 Let
 
@@ -414,7 +390,7 @@ n = b?*011
 Step 1: 
 
 ```
-f(n) = f(b?*011) = b?*011 * 3 + 1 = 3r + b011 + 1
+f(n) = f(b?*011) = b?*011 * 3 + 1 = 3r + b1010
 = b1*000 + b1010             || M + 1
 = b10*010                    || M + 1
 ```
@@ -431,9 +407,64 @@ After division the result is b10\*001, and again this pattern leads to magnitude
 
 So, in case of a = b011 the magnitude of n will start decreasing after third iteration.
 
+b.ii) Case the addition of one does not increase the magnitude:
+
+**Lemma**: |f(f(3n+1))| = |n| + 1 - 1 = |n|, if adding does not propagate.
+
+Proof:
+
+The result is `f(b?*011) = 3*r + b1010`. If fourth bit of the 3\*r is not set, the magnitude won't change due adding 1.
+
+Let 
+
+```
+n = b?*011
+3r = b?*0000   || 4th bit not set after multiplication`
+```
+
+Step 1: 
+
+```
+f(n) = f(b?*011) = b?*011 * 3 + 1 = 3r + b1010
+= b?*0000 + b1010            || M + 1
+= b?*1010                    || M + 0
+```
+
+Step 2:  
+
+```
+f(b?*1010) = b?*101         || M - 1
+=> |f(f(b?*011))| = |b?*011|, if 3r = b?*0000 in the first step.
+```
+The result is b?\*101 and magnitude stays same. From c) we can see that next step reduces the magnitude.
+
+The zero bit does not need to be 4th bit. The result is same if the zero bit is anywhere in the 3\*r result.
+
+**Lemma**: If 3\*r is not b1\*000, the magnitude won't change due adding one. The propagation of addition stops at first zero bit. 
+
+Proof:
+
+In that case 3\*r is b?\*01\*000.
+
+Let
+
+```
+n=b?*101
+3*r = b?*01*000
+
+f(b?*101) = 3*r + b1010
+= b?*01*000` + b1010      || M + 1
+= b?*10*010
+```
+
+Step 2:
+
+`f(b?*10*010) = b?*10*01   || M - 1`
+
+
 c) with a = b101, 
 
-`|f(f(3n+1))| = |n| + 1 - 3 = |n| - 2`
+**Lemma**: |f(f(3n+1))| = |n| - 2, if n=?*101
 
 The adding will increase magnitude, if r = b1\*000. This would lead to following pattern:
 
