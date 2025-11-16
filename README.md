@@ -1,5 +1,5 @@
-Proof of Collatz conjecture with a computer scientific look
-===========================================================
+Proof of Collatz conjecture with a computer scientific twist
+============================================================
 The repository contains a proposal to prove Collatz conjecture using bit patterns and by showing the change of magnitude of bit presentation of the number will eventually decrease towards one when calculation of f(n) is iterated repeadetly. 
 
 16th of November 2025
@@ -464,33 +464,59 @@ Step 2:
 
 c) with a = b101, 
 
-**Lemma**: |f(f(3n+1))| = |n| - 2, if n=?*101
+**Lemma**: |f(f(3n+1))| <= |n| - 2, if n=?*101
 
-The adding will increase magnitude, if r = b1\*000. This would lead to following pattern:
+Proof:
+
+Let
+
+```
+n=b?*101
+```
+
+Step 1:
+
+```
+f(n)=f(b?*101) = 3r + b10000
+= 3 * b?*000 + b10000   
+= b?*000                || M+1, if b?* contains a zero bit.
+```
+
+Steps 2-4:
+
+```
+f(b?*000) = b?*00     || M-1 
+f(b?*00) = b?*0       || M-1 
+f(b?*0) = b?*         || M-1
+
+=> M+1-1-1-1 = M-2 
+```
+
+The adding of one will increase magnitude, if 3r = b1\*000. This would lead to following pattern:
 
 `b1*000 + b10000 = 10*`
 
-After collapse the result is b1 and magnitude is 1.
+After collapse C(10*) the result is b1 and magnitude is 1. The algorithm stops.
 
 d) with a = b111, 
 
-`|f(f(3n+1))| = |n| + 1 - 1 = |n|`
+**Lemma**: |f(f(3n+1))| = |n|, if n=b?\*111.`
 
 In case of a = b111, the result is n = 3\*r + b10110.
 
-d).a If the fifth bit of the 3\*r is not set, the magnitude won't change.
+d.a) If the fifth bit of the 3\*r is not set, the magnitude won't change. The magnitude increase by multiplication is canceled by next steps division.
 
-d).b If the bit is set, the addition probagates and increases only if all bits are set after the fourth bit. Notice, fourth bit may be 0 or 1. I.e.,
+d.b) If the bit is set, the addition probagates and increases only if all bits are set after the fourth bit. Notice, fourth bit may be 0 or 1. I.e.,
 
-`3*r + b10110 = b1*?000 + b10110 = b10*?110 || M + 2`
+`3r + b10110 = b1*?000 + b10110 = b10*?110 || M + 2`
 
 After division 
 
 `b10*?11.     || M - 1`
 
-d).c By further investigation,
+d.c) By further investigation,
 
-d).c.i if ? = 0, then a = b011 and the fourth bit is not set, the magnitude won't change due the addition of a to 3r. Thus, the magnitude will remain the same. After this step pattern is:
+d.c.i) if ? = 0, then a = b011 and the fourth bit is not set, the magnitude won't change due the addition of a to 3r. Thus, the magnitude will remain the same. After this step pattern is:
 
 ```
 n = b10*011
@@ -503,7 +529,7 @@ Collapse four times
 
 `=> b110*1 || M - 4`
 
-d).c.ii If ? = 1, then a = b111 and the fifth bit is not set, the magnitude won't change.
+d.c.ii) If ? = 1, then a = b111 and the fifth bit is not set, the magnitude won't change.
 
 `n = b10*111`
 
