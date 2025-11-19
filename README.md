@@ -53,7 +53,7 @@ In the paper the numbers are natural numbers $n \in N (> 0)$ and the binary pres
 
 To avoid confusion between different bases the binary number is prefixed with a b. For example b11 is three while 11 is eleven.
 
-If binary number is odd, the LSB is one. If the LSB is 0, the number is even. The LSB presents 1 if the bit is set. The other bits present even values $2^i (i > 0)$.
+If binary number is odd, the LSB is one. If the LSB is 0, the number is even. The LSB presents 1 if the bit is set. The other bits present even values $2^i (i > 1)$.
 
 The special symbol \* is used to present 0 or more bits in sequence. Thus, 1\* is sequence of zero or more ones.
 
@@ -151,18 +151,27 @@ Let a be the binary pattern of n. Because n is odd the LSB is 1.
 
 2n will result to ba0 = b?\*10, because of the shift left. By adding n will result to ?\*1, because LSB is set in n.
 
-```math
-\begin{equation}
-\frac{
-    \begin{array}[b]{r}
-      \left( ?^*1 0 \right) \\
-      +  \left( ?^* 1 \right) 
-    \end{array}
-  }{
-    \left( ?^* 1 \right)
-  }
-\end{equation}
 ```
+  ?*10
++  ?*1
+------
+   ?*1
+```
+
+The f(n) contains adding one to 3n when n is odd. Now, that we know 3n is odd adding one will result to even number.
+
+```
+   ?*1
++    1
+------
+  ?*10
+```
+
+When adding one to a binary number, the one is added to LSB of the number. If the LSB is one, the sum of bits would be more than binary numbers can present, so the result is carried over to the next bit in the number. If the next bit is one as well, the result is carried to next bit and so on. We say the adding of one propagates towards HSB. The carrying stops to first zero bit in the number. If all bits are ones the size of the binary number increases with one bit and the HSB is one while other bits are zero. In other words,
+
+**Corollary**: `1* + 1 = 10*`
+**Corollary**: `M(1* + 1) = M(1*) + 1`
+
 
 The algorithm
 -------------
@@ -183,17 +192,17 @@ Let's check what happens to these when f(n) is applied to them.
 
 a) The algorithm will halt for the result being one. Let's check still what happens to b001, if f(n) is applied to it:
 
-f(b001) = 3 \* b001 + 1 = b011 + 1 = b100. 
+`f(b001) = 3 * b001 + 1 = b011 + 1 = b100`.
 
 The result is even and can be shifted twice to get odd number b1. In other words, to result is same.
-
+ 
 If applied to a pattern of b1?\*001, the result would be
 
 f(b1?\*001) = 3 \* b1?\*000 + b100 = b110?\*100
 
 and next steps would collapse it to b110?\*1. Then algorithm would pick one of a)-d) depending on last three bits b??1.
 
-b) f(b011) = 3 \* b011 + 1 = b1001 + 1 = b1010. 
+b) `f(b011) = 3 \* b011 + 1 = b1001 + 1 = b1010`. 
 
 The result is even and can be shifted once to get odd number b101. From c), we can see that b101 applying f(n) to it will result to b1.
 Notice, if the pattern is b1?\*011, adding one will propagate toward HSB and must be resolved as well.
