@@ -174,13 +174,14 @@ When adding one to a binary number, the one is added to LSB of the number. If th
 **Corollary**: `M(1* + 1) = M(1*) + 1`
 
 
-The algorithm
+Building the algorithm
 -------------
+
+The sole purpose of the algorithm is to help prove the conjecture. 
 
 The algorithm treats even numbers by dividing the number by two as in f(n). If the result of division is still even, we continue dividing as long the result is not even. We say the result is collapsed to even and use notation C(n) where pattern of n is 1?\*10\*. After C(n) = C(1?\*10\*) = 1?\*1
 
-If the number is odd, the algorithm uses different step depending on the three lowest significant bits.  The three lowest bits are examined because we want to know whether the result is even or odd and, if the
-result can be collapsed. If the LSB is 1, the result is odd. If the LSB is 0, the result is even and can be divided by two.
+If the number is odd, the algorithm uses different step depending on the three lowest significant bits.  The three lowest bits are examined because we want to know whether the result is even or odd and, if the result can be collapsed. If the LSB is 1, the result is odd. If the LSB is 0, the result is even and can be divided by two.
 
 When n is odd the format is 1?\*1. If considering the three least significant bits we have following choices:
 
@@ -199,7 +200,7 @@ The result is even and can be shifted twice to get odd number b1. In other words
  
 If applied to a pattern of b1?\*001, the result would be
 
-f(b1?\*001) = 3 \* b1?\*000 + b100 = b110?\*100
+`f(b1?\*001) = 3 \* b1?\*000 + b100 = b110?\*100`
 
 and next steps would collapse it to b110?\*1. Then algorithm would pick one of a)-d) depending on last three bits b??1.
 
@@ -208,35 +209,31 @@ b) `f(b011) = 3 \* b011 + 1 = b1001 + 1 = b1010`.
 The result is even and can be shifted once to get odd number b101. From c), we can see that b101 applying f(n) to it will result to b1.
 Notice, if the pattern is b1?\*011, adding one will propagate toward HSB and must be resolved as well.
 
-c) f(b101) = 3 \* b101 + 1 = b1111 + 1 = b10000. 
+c) `f(b101) = 3 \* b101 + 1 = b1111 + 1 = b10000`. 
 
 The result is even and can be shifted four times to get odd number = b1. Notice, if the pattern is b1?\*101, adding one will propagate toward HSB and must be resolved as well.
 
-d) f(b111) = 3 \* b111 + 1 = b10101 + 1 = b10110. 
+d) `f(b111) = 3 \* b111 + 1 = b10101 + 1 = b10110`. 
 
 The result is even and can be shifted once to get odd number n = b1011. The n can be split
 
+```
 n = b1011 = b1000 + b011
+=> f(n) = 3n + 1 = 3 * (b1000 + b011) + 1 
+= 3 * b1000 + 3 * b011 + 1 
+= 3 * b1000 + f(b011)               | From b), we notice that f(b011) is equal to b101. 
+= 3 * b1000 + b101 = b11101
 
-=> f(n) = 3n + 1 = 3 \* (b1000 + b011) + 1 
+f(b11101) = 3 * b11000 + 3 * b101 + 1 
+= 3 * b11000 + f(b101) 
+= 3 * b11000 + b10000 = b101000
+```
 
-= 3 \* b1000 + 3 \* b011 + 1 
-
-= 3 \* b1000 + f(b011)    | From b), we notice that f(b011) is equal to b101. 
-
-= 3 \* b1000 + b101 = b11101
-
-f(b11101) = 3 \* b11000 + 3 \* b101 + 1 
-
-= 3 \* b11000 + f(b101) 
-
-= 3 \* b11000 + b10000 = b101000
-
-Shifting b101000 will result to b101 and from c) we can conclude final result b1.
+Shifting b101000 three times will result to b101 and from c) we can conclude final result b1.
 
 Notice, if the pattern is b1?\*111, adding one will propagate toward HSB and must be resolved as well.
 
-Building the algorithm
+The algorithm
 ----------------------
 
 Let n be any positive natural number.
@@ -282,7 +279,7 @@ Let n be any positive natural number.
 38  }
 ```
 
-Part 1 of the proof: Algorithm calculates f(n)
+Theorem 1 of the proof: Algorithm calculates f(n)
 -------------------------
 
 $f(n) = n/2    \quad \text{if } n \equiv 0 \pmod{2}$
@@ -312,7 +309,7 @@ In lines 12-16: If a is 1 (b001)
 = 3r + 3 + 1
 = 3r + 4           || 4 is b100
 ```
-`
+
 In lines 18-22: If a is 3 (b011)
 
 ```
@@ -337,12 +334,12 @@ In lines 32-36: If a is 7 (b111)
 = 3r + 22           || 22 is b10110
 ```
 
-Part 2 of the proof: The algorithm will stop when result is 1 for every n
+Theorem 2 of the proof: The algorithm will stop when result is 1 for every n
 --------------------------------------------------------------------------
 
 From lines 1, 5, 15, 21, 28, 35: The algorithm loops and sets n = f(n) in every loop, until n == 1, when the iteration stops.
 
-Part 3 of the proof: The algorithm will stop for every n
+Theorem 3 of the proof: The algorithm will stop for every n
 --------------------------------------------------------
 
 When algorithm calculates and sets n=f(n), the magnitude of n changes in every loop depending on n's the lower three bits in each iteration. The proof relies on the observation that magnitude of n may increase and decrease on iterations and after careful study, the magnitude will eventually decrease. Finally, the magnitude will reach 1 when n = 1.
@@ -375,20 +372,21 @@ Step 2:
 
 Step 3: 
 
-```
-f(b?*10) = b?*1               || M - 1
-=> |f(f(f(b?*001)))| = |b?*001| - 1
-```
+`f(b?*10) = b?*1               || M - 1`
 
-b) with a = b011, there is two scenarios to be considered. Whether the addition of one in f(n) does increase the magnitude b.i) or does increases the magnitude b.ii).
+Therefore,
+
+`=> |f(f(f(b?*001)))| = |b?*001| - 1`.
+
+b) with a = b011, there is two scenarios to be considered. Whether the addition of one in f(n) b.i) does increase the magnitude or b.ii) does not increases the magnitude.
 
 b.i) The case when the addition of one increases the magnitude:
 
-**Lemma**: If the fourth bit of the result of multiplication of r is set, the addition propagates and M increases only if all bits are set after the 3rd bit.  
+**Lemma**: If the fourth bit of the result of multiplication of r is set, the addition propagates and M increases by one only if all bits are set after the 3rd bit.  
 
 Proof:
 
-In other words, the addition of one increases M by 1, if 3r = b1\*000.
+In other words, the addition of one increases M by 1, iff 3r = b1\*000.
 
 Let
 
@@ -397,12 +395,56 @@ n = b?*011
 3r = b1*000
 ```
 
-Step 1: 
+and 
 
 ```
-f(n) = f(b?*011) = b?*011 * 3 + 1 = 3r + b1010
-= b1*000 + b1010             || M + 1
-= b10*010                    || M + 1
+f(n) = f(b?*011) = b?*011 * 3 + 1
+     = 3r + b1010
+     = b1*000 + b1010             || M + 1 from multiplication
+     = b10*010                    || M + 1 from addition
+
+=> |f(b?*011)| = |b?*011| + 2
+```
+
+If 3r is not b1\*000, the bit pattern of 3r will contain at least one 0 before HSB. Even if the there is only one zero, the propagation of addition of one will stop.
+
+Let
+
+```
+n = b?*011
+3r = b1*01*000
+```
+
+and 
+
+```
+f(n) = f(b?*011) = b?*011 * 3 + 1
+     = 3r + b1010
+     = b1*01*000 + b1010          || M + 1 from multiplication
+     = b1*10*010                  
+
+=> |f(b?*011)| = |b?*011| + 1
+```
+
+Therefore,
+
+```math 
+ |f(b?*011)| =
+  \begin{cases}
+    |b?*011| + 2   & \quad \text{if } 3r \equiv b1*000\\
+    |b?*011| + 1   & \quad \text{if } 3r \equiv b1*01*000
+  \end{cases}
+```
+
+So, in b.i) we assume the addition of one increases by one. Thus, 3r=b1*000.
+
+Step 1:
+
+```
+n = b?*011
+3r = b1*000
+
+f(b?*011) = b10*010    | M+2, see the previous proof
 ```
 
 Step 2: 
@@ -413,13 +455,14 @@ Step 3:
 
 `see a)               || M - 1`
 
+
 After division the result is b10\*001, and again this pattern leads to magnitude decrease due the a = b001.  The step 3 will result to same pattern b10\*001 but with one 0 less. This will repeat until the pattern is b101 which is shown to be 1 after some more iterations.
 
-So, in case of a = b011 the magnitude of n will start decreasing after third iteration.
+Therefore, in case of a = b011 when addition will propagate, the magnitude of n will start decreasing after third iteration and end to 1.
 
 b.ii) Case the addition of one does not increase the magnitude:
 
-**Lemma**: |f(f(3n+1))| = |n| + 1 - 1 = |n|, if adding does not propagate.
+**Lemma**: |f(f(3n+1))| = |n|, if adding does not propagate.
 
 Proof:
 
@@ -435,18 +478,22 @@ n = b?*011
 Step 1: 
 
 ```
-f(n) = f(b?*011) = b?*011 * 3 + 1 = 3r + b1010
-= b?*0000 + b1010            || M + 1
-= b?*1010                    || M + 0
+f(n) = f(b?*011) = b?*011 * 3 + 1
+     = 3r + b1010
+     = b?*0000 + b1010            || M + 1, from multiplication
+     = b?*1010                    || M + 0, from addition
 ```
 
 Step 2:  
 
-```
-f(b?*1010) = b?*101         || M - 1
-=> |f(f(b?*011))| = |b?*011|, if 3r = b?*0000 in the first step.
-```
-The result is b?\*101 and magnitude stays same. From c) we can see that next step reduces the magnitude.
+`f(b?*1010) = b?*101         || M - 1`
+
+Therefore,
+
+`|f(f(b?*011))| = |b?*011|, if 3r = b?*0000 in the first step.`
+
+
+The `f(b?*011) = b?\*101` and magnitude stays same. From c) we can see that next step reduces the magnitude.
 
 The zero bit does not need to be 4th bit. The result is same if the zero bit is anywhere in the 3\*r result.
 
@@ -471,10 +518,13 @@ Step 2:
 
 `f(b?*10*010) = b?*10*01   || M - 1`
 
+Therefore,
+
+`|f(f(b?*101))| = |b?*101|  if 3r = b?*01*000 in the first step.`
 
 c) with a = b101, 
 
-**Lemma**: |f(f(3n+1))| <= |n| - 2, if n=?*101
+**Lemma**: `|f(f(3n+1))| <= |n| - 2, if n=?*101`
 
 Proof:
 
@@ -490,6 +540,7 @@ Step 1:
 f(n)=f(b?*101) = 3r + b10000
 = 3 * b?*000 + b10000   
 = b?*000                || M+1, if b?* contains a zero bit.
+                        || M+2, if b?* = b1*, see below.
 ```
 
 Steps 2-4:
