@@ -362,21 +362,21 @@ Step 1:
 ```
 f(n) = f(b?*001) = 3 * b?*001 + 1
 = 3 * b?*000 + b100
-= b?*000 + b100               || M + 1
-= b?*100                      || M + 0
+= b?*000 + b100               || M + 1, from multiplication
+= b?*100                      || M + 0, from addition
 ```
 
 Step 2: 
 
-`f(b?*100) = b?*10            || M - 1`
+`f(b?*100) = b?*10            || M - 1, from division`
 
 Step 3: 
 
-`f(b?*10) = b?*1               || M - 1`
+`f(b?*10) = b?*1              || M - 1, from division`
 
 Therefore,
 
-`=> |f(f(f(b?*001)))| = |b?*001| - 1`.
+`|f(f(f(b?*001)))| = |b?*001| - 1`.
 
 b) with a = b011, there is two scenarios to be considered. Whether the addition of one in f(n) b.i) does increase the magnitude or b.ii) does not increases the magnitude.
 
@@ -400,8 +400,8 @@ and
 ```
 f(n) = f(b?*011) = b?*011 * 3 + 1
      = 3r + b1010
-     = b1*000 + b1010             || M + 1 from multiplication
-     = b10*010                    || M + 1 from addition
+     = b1*000 + b1010             || M + 1, from multiplication
+     = b10*010                    || M + 1, from addition
 
 => |f(b?*011)| = |b?*011| + 2
 ```
@@ -420,8 +420,8 @@ and
 ```
 f(n) = f(b?*011) = b?*011 * 3 + 1
      = 3r + b1010
-     = b1*01*000 + b1010          || M + 1 from multiplication
-     = b1*10*010                  
+     = b1*01*000 + b1010          || M + 1, from multiplication
+     = b1*10*010                  || M + 0, from addition
 
 => |f(b?*011)| = |b?*011| + 1
 ```
@@ -429,14 +429,14 @@ f(n) = f(b?*011) = b?*011 * 3 + 1
 Therefore,
 
 ```math 
- |f(b?*011)| =
+|f(b?*011)| =
   \begin{cases}
-    |b?*011| + 2   & \quad \text{if } 3r \equiv b1*000\\
-    |b?*011| + 1   & \quad \text{if } 3r \equiv b1*01*000
+|b?^*011|+2   & \quad \text{if } 3r \equiv b1^*000 \\
+|b?^*011|+1   & \quad \text{if } 3r \equiv b1^*01^*000
   \end{cases}
 ```
 
-So, in b.i) we assume the addition of one increases by one. Thus, 3r=b1*000.
+In b.i) we assume the addition of one increases by one. Thus, 3r=b1*000.
 
 Step 1:
 
@@ -444,12 +444,12 @@ Step 1:
 n = b?*011
 3r = b1*000
 
-f(b?*011) = b10*010    | M+2, see the previous proof
+f(b?*011) = b10*010    || M+2, see the previous proof
 ```
 
 Step 2: 
 
-`f(b10*010) = b10*01  || M - 1`
+`f(b10*010) = b10*01  || M - 1, from division`
 
 Step 3: 
 
@@ -462,7 +462,7 @@ Therefore, in case of a = b011 when addition will propagate, the magnitude of n 
 
 b.ii) Case the addition of one does not increase the magnitude:
 
-**Lemma**: |f(f(3n+1))| = |n|, if adding does not propagate.
+**Lemma**: `|f(f(3n+1))| = |n|, if adding does not propagate.`
 
 Proof:
 
@@ -486,7 +486,7 @@ f(n) = f(b?*011) = b?*011 * 3 + 1
 
 Step 2:  
 
-`f(b?*1010) = b?*101         || M - 1`
+`f(b?*1010) = b?*101         || M - 1, from division`
 
 Therefore,
 
@@ -539,16 +539,16 @@ Step 1:
 ```
 f(n)=f(b?*101) = 3r + b10000
 = 3 * b?*000 + b10000   
-= b?*000                || M+1, if b?* contains a zero bit.
-                        || M+2, if b?* = b1*, see below.
+= b?*000                || M+1, from multiplication, if b?* contains a zero bit.
+                        || M+2, from multiplication and addition,if b?* = b1*, see below.
 ```
 
 Steps 2-4:
 
 ```
-f(b?*000) = b?*00     || M-1 
-f(b?*00) = b?*0       || M-1 
-f(b?*0) = b?*         || M-1
+f(b?*000) = b?*00     || M-1, from division 
+f(b?*00) = b?*0       || M-1, from division 
+f(b?*0) = b?*         || M-1, from division
 
 => M+1-1-1-1 = M-2 
 ```
@@ -561,40 +561,89 @@ After collapse C(10*) the result is b1 and magnitude is 1. The algorithm stops.
 
 d) with a = b111, 
 
-**Lemma**: |f(f(3n+1))| = |n|, if n=b?\*111.`
+**Lemma**: `|f(f(3n+1))| = |n|, if n=b?*111.`
 
 In case of a = b111, the result is n = 3\*r + b10110.
 
-d.a) If the fifth bit of the 3\*r is not set, the magnitude won't change. The magnitude increase by multiplication is canceled by next steps division.
+d.a) If the fifth bit of the 3\*r is not set, the magnitude won't change. The magnitude increase by multiplication is canceled by next step's division.
+
+Let
+
+```
+n=b?*111
+3r=b?*0?000
+```
+
+Step 1
+
+```
+f(b?*111) = 3r + b10110
+= b?*0?000 + b10110         || M+1, from multiplication
+= b?*1?110                  || M+0, from addition
+```
+
+Step 2
+
+```
+f(b?*1?110) = b?*1?11       || M-1, from division
+```
+
+Therefore,
+
+`|f(f(b?*111))| = |b?*111|`
 
 d.b) If the bit is set, the addition probagates and increases only if all bits are set after the fourth bit. Notice, fourth bit may be 0 or 1. I.e.,
 
-`3r + b10110 = b1*?000 + b10110 = b10*?110 || M + 2`
-
-After division 
-
-`b10*?11.     || M - 1`
-
-d.c) By further investigation,
-
-d.c.i) if ? = 0, then a = b011 and the fourth bit is not set, the magnitude won't change due the addition of a to 3r. Thus, the magnitude will remain the same. After this step pattern is:
+Let
 
 ```
-n = b10*011
-3n + 1 = 3 * b10*011 + 1
-=> 3 * b10*000 + b10000
-=> b110*10000    || M + 1
+n=b?*111
+3r=b1*?000
 ```
+
+Step 1
+
+```
+f(b?*111) = 3r + b10110
+= b1*?000 + b10110         || M + 1, from multiplication
+= b10*?110                 || M + 1, from addition`
+```
+
+Step 2
+
+`f(b10*?110) = b10*?11    || M - 1, from division`
+
+By further investigation,
+
+d.b.i) In b10*?11, if ? = 0, then a = b011 and the fourth bit is not set, the magnitude won't change due the addition of a to 3r.
+
+Step 3 of d.b.i)
+
+```
+n = b10*011         | from Step 2 and ? = 0
+
+f(n) = 3n + 1
+     = 3 * b10*011 + 1
+     = 3 * b10*000 + b10000
+     = b110*10000            || M + 1, from multiplication
+```
+
+Step 4 of d.b.i)
 
 Collapse four times 
 
 `=> b110*1 || M - 4`
 
-d.c.ii) If ? = 1, then a = b111 and the fifth bit is not set, the magnitude won't change.
+Therefore, in d.b.i) the magnitude of n will decrease by 2.
 
-`n = b10*111`
 
-If there is no 0s, n = b1111
+d.b.ii) In b10*?11, If ? = 1, then a = b111 and the fifth bit is not set, the magnitude won't change.
+
+Step 3 of d.b.ii)
+
+`n = b10*111     | from Step 2 and ? = 1`
+
+If there is no 0s in b10*111, then n = b1111
 
 Let's demonstrate how the algorithm processes b1111:
 
@@ -649,7 +698,7 @@ b1111
 = b1
 ```
 
-Let's show the same with one 0, n = b10111. The process is presented in more compacted form:
+Let's show the same with one 0 in b10*111, then n = b10111. The process is presented in more compacted form:
 
 ```
 n           r           a      +             M
@@ -664,7 +713,7 @@ b10000 >> 4                                 -4
 b1                                           1
 ```
 
-And for arbitrary number of 0s.
+And for arbitrary number of 0s (more than one) in b10*111.
 
 ```
 n                 r                a       +            M
@@ -684,21 +733,19 @@ b10110110010*1                                         -3 [!]
 ```
 
 We start repeating a = b001 and eat all the 0s from the middle. The magnitude is reduced by three in total.
-Depending on how many 0s there are the r = $3^s$ and a = {001,011, 101, 111}  $3^s$ + {1,3,5,7}
 
-First step explained:
+First step of the previous processing explained:
 
 ```
-3n + 1 
-=> 3 * b10*111 + 1
-= 3 * b10*000 + b10110
-=> b110*10110 || M + 1
-Collapse once => b110*1011 || M - 1
+f(n) = 3n + 1 
+     = 3 * b10*111 + 1         || r=b10*000, a=b111
+     = 3 * b10*000 + b10110    || +=b10110
+     = b110*10110              || M + 1, from multiplication
 ```
 
 Conclusion
 ----------
 
 The designed algorithm calculates f(n), stops when f(n) results to 1, and stops for every natural number n > 0. 
-Therefore the Collatz conjecture is shown to be true for every n.
+Therefore the Collatz conjecture is shown to be true for every $n \in N (> 0)$.
 
