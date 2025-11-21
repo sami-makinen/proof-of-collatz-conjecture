@@ -39,8 +39,8 @@ The proof relies on the observation that magnitude of number's binary presentati
 
 The proof consist of three theorems and each theorem is demonstrated to be true. 
 - the algorithm calculates the f(n),
-- the algorithm stops when result is 1 for any n,
-- the algorithm is decidable and stops for any n. 
+- the algorithm stops when result is 1 for any input n,
+- the algorithm is decidable and stops for any input n. 
 
 As a conclusion, the theorems form a proof of Collatz conjecture.
 
@@ -334,12 +334,12 @@ In lines 32-36: If a is 7 (b111)
 = 3r + 22           || 22 is b10110
 ```
 
-Theorem 2 of the proof: The algorithm will stop when result is 1 for every n
+Theorem 2 of the proof: The algorithm will stop when result is 1 for any input n
 --------------------------------------------------------------------------
 
 From lines 1, 5, 15, 21, 28, 35: The algorithm loops and sets n = f(n) in every loop, until n == 1, when the iteration stops.
 
-Theorem 3 of the proof: The algorithm will stop for every n
+Theorem 3 of the proof: The algorithm will stop for any input n
 --------------------------------------------------------
 
 When algorithm calculates and sets n=f(n), the magnitude of n changes in every loop depending on n's the lower three bits in each iteration. The proof relies on the observation that magnitude of n may increase and decrease on iterations and after careful study, the magnitude will eventually decrease. Finally, the magnitude will reach 1 when n = 1.
@@ -493,7 +493,7 @@ Therefore,
 `|f(f(b?*011))| = |b?*011|, if 3r = b?*0000 in the first step.`
 
 
-The `f(b?*011) = b?\*101` and magnitude stays same. From c) we can see that next step reduces the magnitude.
+The `f(f(b?*011)) = b?*101` and magnitude stays same. From c) we can see that next step reduces the magnitude.
 
 The zero bit does not need to be 4th bit. The result is same if the zero bit is anywhere in the 3\*r result.
 
@@ -592,7 +592,13 @@ Therefore,
 
 `|f(f(b?*111))| = |b?*111|`
 
-d.b) If the bit is set, the addition probagates and increases only if all bits are set after the fourth bit. Notice, fourth bit may be 0 or 1. I.e.,
+d.a.i) The result of d.a) is `f(f(b?*111)) = b?*1?11`. 
+
+If ? in result is 0, the pattern is b?*1011 and the next step is b).
+
+If ? in result is 1, the pattern is b?*1111.
+
+d.b) If the fifth bit of the 3r is set, the addition probagates and increases only if all bits are set after the fourth bit. Notice, fourth bit may be 0 or 1. I.e.,
 
 Let
 
@@ -741,6 +747,28 @@ f(n) = 3n + 1
      = 3 * b10*111 + 1         || r=b10*000, a=b111
      = 3 * b10*000 + b10110    || +=b10110
      = b110*10110              || M + 1, from multiplication
+```
+
+Summary of a)-d) 
+
+```
+a)   |f(f(f(n)))| = |n| - 1, if n=b?*001
+
+b.i) |f(b?*011)| = |b?*011| + 2          if addition of one increases M by 1
+     |f(f(b?*011))| = |b?*011| + 1       if addition of one increases M by 1
+     f(f(b?*011)) = b10*01               next step is to repeat a) as long as lowest bits are b001, each repeation reduces M by 1.
+                                         repeat until the pattern is b101 which is shown to be 1 after some more iterations.
+b.ii) |f(b?*011)| = |b?*011| + 1         if addition does not increase M by 1
+      |f(f(b?*011))| = |b?*011|          if adding does not propagate.
+       f(f(b?*011)) = b?*101             next step is to apply c) to this pattern
+c)    |f(f(f(f(b?*101))))| = |?*101| - 2 if ?* contains at least one zero before HSB. 
+      C(f(b?*101)) = 1                   if ?* == 1*
+
+d.a) |f(f(?*111))| = |?*111|             if the fifth bit of the 3r is not set.
+d.b.i) the magnitude of n will decrease by 2.
+d.b.ii) the algorithm stops at 1 or the magnitude is reduced by three in total.
+
+
 ```
 
 Conclusion
