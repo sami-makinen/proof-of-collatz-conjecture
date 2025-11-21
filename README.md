@@ -158,7 +158,7 @@ Let a be the binary pattern of n. Because n is odd the LSB is 1.
    ?*1
 ```
 
-The f(n) contains adding one to 3n when n is odd. Now, that we know 3n is odd adding one will result to even number.
+The f(n) contains adding one to 3n when n is odd. Now, that we know 3n is odd adding one will result to an even number.
 
 ```
    ?*1
@@ -167,9 +167,10 @@ The f(n) contains adding one to 3n when n is odd. Now, that we know 3n is odd ad
   ?*10
 ```
 
-When adding one to a binary number, the one is added to LSB of the number. If the LSB is one, the sum of bits would be more than binary numbers can present, so the result is carried over to the next bit in the number. If the next bit is one as well, the result is carried to next bit and so on. We say the adding of one propagates towards HSB. The carrying stops to first zero bit in the number. If all bits are ones the size of the binary number increases with one bit and the HSB is one while other bits are zero. In other words,
+When adding one to a binary number, the one is added to LSB of the number. If the LSB is one, the sum of bits would be more than binary numbers can present, so the result is carried over to the next bit in the number. If the next bit is one as well, the result is carried to next bit and so on. We say the adding of one propagates towards HSB. The carrying stops to first zero bit in the number. If all bits are ones, the size of the binary number increases with one bit and the HSB is one while other bits are zero. In other words,
 
 **Corollary**: `1* + 1 = 10*`
+
 **Corollary**: `M(1* + 1) = M(1*) + 1`
 
 
