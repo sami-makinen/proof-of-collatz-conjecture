@@ -53,7 +53,7 @@ In the paper the numbers are natural numbers $n \in N (> 0)$ and the binary pres
 
 To avoid confusion between different bases the binary number is prefixed with a b. For example b11 is three while 11 is eleven.
 
-If binary number is odd, the LSB is one. If the LSB is 0, the number is even. The LSB presents 1 if the bit is set. The other bits present even values $2^i (i > 1)$.
+If binary number is odd, the LSB is one. If the LSB is 0, the number is even. The LSB presents 1 if the bit is set. The other bits present even values $2^i (i > 0)$.
 
 The special symbol \* is used to present 0 or more bits in sequence. Thus, 1\* is sequence of zero or more ones.
 
