@@ -264,8 +264,6 @@ Step 4:
   f(b110110) = b11011
 ```
 
-Shifting b110110 will result to b11011.
-
 Notice, if the pattern is b1?\*111, adding one will propagate toward HSB and must be resolved as well.
 
 The algorithm
@@ -524,7 +522,9 @@ Step 1:
 
 Step 2:  
 
-`  f(b?*1010) = b?*101         || M - 1, from division`
+```
+  f(b?*1010) = b?*101         || M - 1, from division
+```
 
 Therefore,
 
@@ -554,11 +554,15 @@ Let
 
 Step 2:
 
-`  f(b?*10*010) = b?*10*01   || M - 1`
+```
+  f(b?*10*010) = b?*10*01   || M - 1
+```
 
 Therefore,
 
-`  |f(f(b?*101))| = |b?*101|  if 3r = b?*01*000 in the first step.`
+```
+  |f(f(b?*101))| = |b?*101|  if 3r = b?*01*000 in the first step.
+```
 
 c) with a = b101, 
 
@@ -612,7 +616,7 @@ Let
   3r = b?*0?000
 ```
 
-Step 1
+Step 1:
 
 ```
   f(b?*111) = 3r + b10110
@@ -620,7 +624,7 @@ Step 1
             = b?*1?110                  || M+0, from addition
 ```
 
-Step 2
+Step 2:
 
 ```
   f(b?*1?110) = b?*1?11       || M-1, from division
@@ -628,7 +632,9 @@ Step 2
 
 Therefore,
 
-`  |f(f(b?*111))| = |b?*111|`
+```
+  |f(f(b?*111))| = |b?*111|
+```
 
 The result of d.a) is `f(f(b?*111)) = b?*1?11`. 
 
@@ -642,7 +648,8 @@ Let
   n=b?*1111
 ```
 
-Step 1
+Step 1:
+
 ```
   f(b?*1111) = 3r + b10110
              = 3 * b?*1000 + b10110
@@ -650,14 +657,14 @@ Step 1
              = b?*01110 + b100000
 ```
 
-Step 2
+Step 2:
 
 ```
   f(f(b?*1111)) = f(b?*01110 + b100000)
                 = b?*0111 + b10000   || M - 1, from division
 ```
 
-Step 3
+Step 3:
 
 ```
   f(f(f(b?*1111))) = f(b?*0111 + b10000)
@@ -667,7 +674,7 @@ Step 3
                    = b?*00110 + 1000000
 ```
 
-Step 4
+Step 4:
 
 ```
   f(f(f(f(b?*1111)))) = f(b?*00110 + b1000000)
@@ -700,12 +707,14 @@ Step 1
 ```
   f(b?*111) = 3r + b10110
             = b1*?000 + b10110         || M + 1, from multiplication
-            = b10*?110                 || M + 1, from addition`
+            = b10*?110                 || M + 1, from addition
 ```
 
 Step 2
 
-`  f(b10*?110) = b10*?11    || M - 1, from division`
+```
+  f(b10*?110) = b10*?11    || M - 1, from division
+```  
 
 By further investigation,
 
@@ -726,18 +735,22 @@ Step 4 of d.b.i)
 
 Collapse four times 
 
-`  C(b110*10000, 4) = b110*1 || M - 4`
+```
+  C(b110*10000, 4) = b110*1 || M - 4
+```  
 
 Therefore, in d.b.i) the magnitude of n will decrease by 2.
 
 
-d.b.ii) In b10*?11, If ? = 1, then a = b111 and the fifth bit is not set, the magnitude won't change.
+d.b.ii) In b10\*?11, If ? = 1, then a = b111 and the fifth bit is not set, the magnitude won't change.
 
 Step 3 of d.b.ii)
 
-`  n = b10*111     | from Step 2 and ? = 1`
+```
+  n = b10*111     | from Step 2 and ? = 1
+```
 
-If there is no 0s in b10*111, then n = b1111
+If there is no 0s in b10\*111, then n = b1111
 
 Let's demonstrate how the algorithm processes b1111:
 
@@ -853,31 +866,30 @@ a)      |f(f(f(n)))| = |n| - 1, if n=b?*001
 b.i)    |f(b?*011)| = |b?*011| + 2          if addition of one increases M by 1
         |f(f(b?*011))| = |b?*011| + 1       if addition of one increases M by 1
         f(f(b?*011)) = b10*01               next step is to repeat a) as long as lowest bits are b001, each repeation reduces M by 1.
-                                         repeat until the pattern is b101 which is shown to be 1 after some more iterations.
-b.ii)   |f(b?*011)| = |b?*011| + 1         if addition does not increase M by 1
-        |f(f(b?*011))| = |b?*011|          if adding does not propagate.
-        f(f(b?*011)) = b?*101             next step is to apply c) to this pattern
+                                            repeat until the pattern is b101 which is shown to be 1 after some more iterations.
+					    
+b.ii)   |f(b?*011)| = |b?*011| + 1          if addition does not increase M by 1
+        |f(f(b?*011))| = |b?*011|           if adding does not propagate.
+        f(f(b?*011)) = b?*101               next step is to apply c) to this pattern
 
-c)      |f(f(f(f(b?*101))))| = |?*101| - 2 if ?* contains at least one zero before HSB. 
-        C(f(b?*101)) = 1                   if ?* == 1*
+c)      |f(f(f(f(b?*101))))| = |?*101| - 2  if ?* contains at least one zero before HSB. 
+        C(f(b?*101)) = 1                    if ?* == 1*
 
 d.a)    |f(f(?*111))| = |?*111|             if the fifth bit of the 3r is not set.
-        f(f(b?*111)) = b?*1?11
+         f(f(b?*111)) = b?*1?11
 
 d.a.i)  If ? in result is 0, the pattern is b?\*1011 and the next step is b).
 
 d.a.ii) If ? in result is 1, the pattern is b?\*1111.
         |f(f(f(f(b?*1111))))| = |b?*1111|
-        f(f(f(f(b?*1111)))) = b?*0011          next step is b).
+          f(f(f(f(b?*1111)))) = b?*0011          next step is b).
 
 d.b)  |f(f(b?*111))| = |b?*111| + 1
-      f(f(b?*111)) = b10*?11
+        f(f(b?*111)) = b10*?11
 
 d.b.i) |C(f(f(f(b?*111))), 4)| = |b?*111| - 2
 
 d.b.ii) the algorithm stops at 1 or the magnitude is reduced by three in total.
-
-
 ```
 
 Conclusion
