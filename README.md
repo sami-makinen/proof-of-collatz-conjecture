@@ -422,21 +422,16 @@ f(n) = f(b?*011) = b?*011 * 3 + 1
      = 3r + b1010
      = b1*01*000 + b1010          || M + 1, from multiplication
      = b1*10*010                  || M + 0, from addition
-
-=> |f(b?*011)| = |b?*011| + 1
 ```
 
 Therefore,
 
-```math 
-|f(b?*011)| =
-  \begin{cases}
-|b?^*011|+2   & \quad \text{if } 3r \equiv b1^*000 \\
-|b?^*011|+1   & \quad \text{if } 3r \equiv b1^*01^*000
-  \end{cases}
+```
+|f(b?*011)| = |b?*011| + 2  if 3r = b1*000
+|f(b?*011)| = |b?*011| + 1  if 3r = b1*01*000
 ```
 
-In b.i) we assume the addition of one increases by one. Thus, 3r=b1*000.
+In b.i) let's assume the addition of one increases by one. Thus, 3r=b1*000.
 
 Step 1:
 
@@ -444,7 +439,7 @@ Step 1:
 n = b?*011
 3r = b1*000
 
-f(b?*011) = b10*010    || M+2, see the previous proof
+f(b?*011) = b10*010    || M+2, see above
 ```
 
 Step 2: 
@@ -462,7 +457,7 @@ Therefore, in case of a = b011 when addition will propagate, the magnitude of n 
 
 b.ii) Case the addition of one does not increase the magnitude:
 
-**Lemma**: `|f(f(3n+1))| = |n|, if adding does not propagate.`
+**Lemma**: `|f(f(b?*011))| = |b?*011|, if adding does not propagate.`
 
 Proof:
 
@@ -563,7 +558,7 @@ d) with a = b111,
 
 **Lemma**: `|f(f(3n+1))| = |n|, if n=b?*111.`
 
-In case of a = b111, the result is n = 3\*r + b10110.
+In case of a = b111, f(n) = 3\*r + b10110.
 
 d.a) If the fifth bit of the 3\*r is not set, the magnitude won't change. The magnitude increase by multiplication is canceled by next step's division.
 
@@ -592,11 +587,61 @@ Therefore,
 
 `|f(f(b?*111))| = |b?*111|`
 
-d.a.i) The result of d.a) is `f(f(b?*111)) = b?*1?11`. 
+The result of d.a) is `f(f(b?*111)) = b?*1?11`. 
 
-If ? in result is 0, the pattern is b?*1011 and the next step is b).
+d.a.i) If ? in result is 0, the pattern is b?\*1011 and the next step is b).
 
-If ? in result is 1, the pattern is b?*1111.
+d.a.ii) If ? in result is 1, the pattern is b?\*1111.
+
+Let
+
+```
+n=b?*1111
+```
+
+Step 1
+```
+f(b?*1111) = 3r + b10110
+           = 3 * b?*1000 + b10110
+           = b?*11110 + b10000      || M + 1, from multiplication
+	   = b?*01110 + b100000
+```
+
+Step 2
+
+```
+f(f(b?*1111)) = f(b?*01110 + b100000)
+              = b?*0111 + b10000   || M - 1, from division
+```
+
+Step 3
+
+```
+f(f(f(b?*1111))) = f(b?*0111 + b10000)
+                 = 3 * (b?*0111 + b10000) + 1
+		 = 3 * b?*0111 + 3 * b10000 + 1
+                 = b?*10110 + b110000   || M + 1, from multiplication. Note: 10110 + b110000 = 1000110
+		 = b?*00110 + 1000000
+```
+
+Step 4
+
+```
+f(f(f(f(b?*1111)))) = f(b?*00110 + b1000000)
+                    = b?*0011 + b100000  || M - 1, from division
+```		 
+
+Therefore,
+
+```
+|f(f(f(f(b?*1111))))| = |b?*1111|
+```
+
+If all bits are ones after 5th bit the pattern is n=b1*?0011. Adding
+b100000 would lead to `b1*?0011 + b100000 = 10*?0011`. Otherwise,
+`b?*0011 + b100000 = b?*0011`. In either case, stepping continues as
+in b) from which we can see the magnitude of n is reduced.
+
 
 d.b) If the fifth bit of the 3r is set, the addition probagates and increases only if all bits are set after the fourth bit. Notice, fourth bit may be 0 or 1. I.e.,
 
@@ -638,7 +683,7 @@ Step 4 of d.b.i)
 
 Collapse four times 
 
-`=> b110*1 || M - 4`
+`C(b110*10000, 4) = b110*1 || M - 4`
 
 Therefore, in d.b.i) the magnitude of n will decrease by 2.
 
@@ -752,20 +797,33 @@ f(n) = 3n + 1
 Summary of a)-d) 
 
 ```
-a)   |f(f(f(n)))| = |n| - 1, if n=b?*001
+a)      |f(f(f(n)))| = |n| - 1, if n=b?*001
 
-b.i) |f(b?*011)| = |b?*011| + 2          if addition of one increases M by 1
-     |f(f(b?*011))| = |b?*011| + 1       if addition of one increases M by 1
-     f(f(b?*011)) = b10*01               next step is to repeat a) as long as lowest bits are b001, each repeation reduces M by 1.
+b.i)    |f(b?*011)| = |b?*011| + 2          if addition of one increases M by 1
+        |f(f(b?*011))| = |b?*011| + 1       if addition of one increases M by 1
+        f(f(b?*011)) = b10*01               next step is to repeat a) as long as lowest bits are b001, each repeation reduces M by 1.
                                          repeat until the pattern is b101 which is shown to be 1 after some more iterations.
-b.ii) |f(b?*011)| = |b?*011| + 1         if addition does not increase M by 1
-      |f(f(b?*011))| = |b?*011|          if adding does not propagate.
-       f(f(b?*011)) = b?*101             next step is to apply c) to this pattern
-c)    |f(f(f(f(b?*101))))| = |?*101| - 2 if ?* contains at least one zero before HSB. 
-      C(f(b?*101)) = 1                   if ?* == 1*
+b.ii)   |f(b?*011)| = |b?*011| + 1         if addition does not increase M by 1
+        |f(f(b?*011))| = |b?*011|          if adding does not propagate.
+        f(f(b?*011)) = b?*101             next step is to apply c) to this pattern
 
-d.a) |f(f(?*111))| = |?*111|             if the fifth bit of the 3r is not set.
-d.b.i) the magnitude of n will decrease by 2.
+c)      |f(f(f(f(b?*101))))| = |?*101| - 2 if ?* contains at least one zero before HSB. 
+        C(f(b?*101)) = 1                   if ?* == 1*
+
+d.a)    |f(f(?*111))| = |?*111|             if the fifth bit of the 3r is not set.
+        f(f(b?*111)) = b?*1?11
+
+d.a.i)  If ? in result is 0, the pattern is b?\*1011 and the next step is b).
+
+d.a.ii) If ? in result is 1, the pattern is b?\*1111.
+        |f(f(f(f(b?*1111))))| = |b?*1111|
+        f(f(f(f(b?*1111)))) = b?*0011          next step is b).
+
+d.b)  |f(f(b?*111))| = |b?*111| + 1
+      f(f(b?*111)) = b10*?11
+
+d.b.i) |C(f(f(f(b?*111))), 4)| = |b?*111| - 2
+
 d.b.ii) the algorithm stops at 1 or the magnitude is reduced by three in total.
 
 
