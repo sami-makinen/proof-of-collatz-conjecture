@@ -61,15 +61,18 @@ The 01\* presents a sequence of bits where the 0 is followed by zero or more num
 
 ```
 If 0 is added to ? the result is ?.  
-If 1 is added to ? the result is 10*, because if ? is 0, the result is 1 and, if ? is 1, the result is 10.  
-If ? is added to ? the result is ?*, because the choices are: 0+0 = 0, 0+1 = 1, 1+0=1, 1+1=10.  
+If 1 is added to ? the result is 10*, because if ? is 0, the result is 1 and,
+                                              if ? is 1, the result is 10.
+If ? is added to ? the result is ?*, because the choices are: 0+0 = 0, 0+1 = 1,
+                                                              1+0 = 1, 1+1 = 10.  
 If 0 is added to 01* the result is 01*.  
 If 1 is added to 01* the result is 10*.  
 If 0 is added to 10* the result is 10*.  
 If 1 is added to 10* the result is 10*1.  
 if ? is added to 1*, the result is 1*?.
-If 0, 1 or ? is added to ?*, the result is ?*. The adding of 0 won't change the binary sequence.
-  The adding of 1 will change the binary sequence but because we don't know how, the result is ?*.
+If 0, 1 or ? is added to ?*, the result is ?*. The adding of 0 won't change
+    the binary sequence. The adding of 1 will change the binary sequence but
+    because we don't know how, the result is ?*.
 ```
 
 The notation n >> x means that the bits of n are shifted to the right x times. This is equal to division of n by $2^x$.
