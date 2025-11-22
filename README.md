@@ -26,7 +26,7 @@ When f(n) is applied to the result of previous f(n), i.e. f(f(n)) and continued 
 
 While the empirical studies have shown the conjecture most likely true, the conjecture stays unproven. While some trials have been made the conjecture still lacks widely accepted proof.
 
-This paper proposes an other trial of proof of the Collatz conjecture. While the author sincerely believes the proof is valid, it requires validation and acceptance from scientific community. So, takes this with a grain of salt.
+This paper proposes an other trial of proof of the Collatz conjecture. While the author sincerely believes the proof is valid, it requires validation and acceptance from scientific community. So, take this with a grain of salt.
 
 The proposal of proof is published openly for criticism and inspection.
 
