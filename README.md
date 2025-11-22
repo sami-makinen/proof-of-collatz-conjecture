@@ -899,9 +899,9 @@ c)      |f(f(f(f(b?*101))))| = |?*101| - 2  if ?* contains at least one zero bef
 d.a)    |f(f(?*111))| = |?*111|             if the fifth bit of the 3r is not set.
          f(f(b?*111)) = b?*1?11
 
-d.a.i)  If ? in result is 0, the pattern is b?\*1011 and the next step is b).
+d.a.i)  If ? in result is 0, the pattern is b?*1011 and the next step is b).
 
-d.a.ii) If ? in result is 1, the pattern is b?\*1111.
+d.a.ii) If ? in result is 1, the pattern is b?*1111.
         |f(f(f(f(b?*1111))))| = |b?*1111|
           f(f(f(f(b?*1111)))) = b?*0011          next step is b).
 
