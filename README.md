@@ -60,16 +60,16 @@ The special symbol \* is used to present 0 or more bits in sequence. Thus, 1\* i
 The 01\* presents a sequence of bits where the 0 is followed by zero or more number of 1-bits. Similarly, 10\* presents a sequence of bits where the 1 is followed any number of 0-bits. The special symbol ? is used when the bit value is unknown. The ? can be either 0 or 1. The ?\* is sequence of any bits and has length of 0 or more.
 
 ```
-  If 0 is added to ? the result is ?.  
-  If 1 is added to ? the result is 10*, because if ? is 0, the result is 1 and, if ? is 1, the result is 10.  
-  If ? is added to ? the result is ?*, because the choices are: 0+0 = 0, 0+1 = 1, 1+0=1, 1+1=10.  
-  If 0 is added to 01* the result is 01*.  
-  If 1 is added to 01* the result is 10*.  
-  If 0 is added to 10* the result is 10*.  
-  If 1 is added to 10* the result is 10*1.  
-  if ? is added to 1*, the result is 1*?.
-  If 0, 1 or ? is added to ?*, the result is ?*. The adding of 0 won't change the binary sequence.
-    The adding of 1 will change the binary sequence but because we don't know how, the result is ?*.
+If 0 is added to ? the result is ?.  
+If 1 is added to ? the result is 10*, because if ? is 0, the result is 1 and, if ? is 1, the result is 10.  
+If ? is added to ? the result is ?*, because the choices are: 0+0 = 0, 0+1 = 1, 1+0=1, 1+1=10.  
+If 0 is added to 01* the result is 01*.  
+If 1 is added to 01* the result is 10*.  
+If 0 is added to 10* the result is 10*.  
+If 1 is added to 10* the result is 10*1.  
+if ? is added to 1*, the result is 1*?.
+If 0, 1 or ? is added to ?*, the result is ?*. The adding of 0 won't change the binary sequence.
+  The adding of 1 will change the binary sequence but because we don't know how, the result is ?*.
 ```
 
 The notation n >> x means that the bits of n are shifted to the right x times. This is equal to division of n by $2^x$.
@@ -79,13 +79,13 @@ The notation n >> x means that the bits of n are shifted to the right x times. T
 Some remarks about division by two (shifting to the right by 1). Notice: this would lead to rounding down, if pattern presents odd number.
 
 ```
-   b1 >> 1 = b0
-  b1* >> 1 = b1*
-  b1*0 >> 1 = b1*
-  b? >> 1 = b0
-  b?* >> 1 = b?*
-  b?0 >> 1 = b?
-  b?*0 >> 1 = b?*
+b1 >> 1 = b0
+b1* >> 1 = b1*
+b1*0 >> 1 = b1*
+b? >> 1 = b0
+b?* >> 1 = b?*
+b?0 >> 1 = b?
+b?*0 >> 1 = b?*
 ```
 
 The notation n << x means that the bits of n are shifted to the left x times. This is equal to multiplication of n by $2^x$.
@@ -95,10 +95,10 @@ The notation n << x means that the bits of n are shifted to the left x times. Th
 Some remarks about multiplication by two (shifting to the left by 1).
 
 ```
-  b1 << 1 = b10
-  b1* << 1 = b1*0.
-  b? << 1 = ?0.
-  b?* << 1 = ?*0.
+b1 << 1 = b10
+b1* << 1 = b1*0.
+b? << 1 = ?0.
+b?* << 1 = ?*0.
 ```
 
 The minimum length of the bit string needed to present a number in binary presentation is called magnitude of the binary number and marked with M. The right-most 0s are ignored when calculating the
@@ -107,15 +107,15 @@ magnitude. Thus, b000100 magnitude is 3 because the right-most three zeros are i
 The magnitude M of bit string n is |n|. Simply, M = |n| Some rules about magnitude of n:
 
 ```
-  |0| = 0
-  |1| = 1
-  |?| = 0 or 1
-  |0*| = 0
-  |10*| >= 1
-  |1*| >= 0
-  |1?*| >= 1
-  |1?* << 1| = |1?*| + 1
-  |1?* >> 1| = |1?*| - 1
+|0| = 0
+|1| = 1
+|?| = 0 or 1
+|0*| = 0
+|10*| >= 1
+|1*| >= 0
+|1?*| >= 1
+|1?* << 1| = |1?*| + 1
+|1?* >> 1| = |1?*| - 1
 ```  
 
 Insights of calculating f(n) with binary operations
