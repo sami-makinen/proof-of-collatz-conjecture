@@ -162,6 +162,38 @@ When adding one to a binary number, the one is added to LSB of the number. If th
 
 **Corollary**: `M(1* + 1) = M(1*) + 1`
 
+**Lemma**: `|f(f(n))| = |n|, if n is odd and adding does not propagate on first step.`
+
+Proof:
+
+Let
+
+```
+n = b?*1      || n is any odd number
+```
+
+Step 1:
+
+```
+f(n) = 3n + 1
+     = 3 * b?*1 + 1
+     = b?*11 + 1    || M + 1, from multiplication
+     = b?*00        || M + 0, from lemma
+```
+
+Step 2:
+
+```
+f(f(n)) = f(3n + 1)
+        = f(b?*00) || even
+	= b?*0     || M - 1
+```
+
+Therefore,
+
+```
+|f(f(n))|  = |b?*1|
+```
 
 Building the algorithm
 -------------
