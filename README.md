@@ -192,7 +192,7 @@ f(f(n)) = f(3n + 1)
 Therefore,
 
 ```
-|f(f(n))|  = |b?*1|
+|f(f(b?*1))| = |b?*1| <=> |f(f(n))| = |n|, if n is odd and adding does not propagate on first step.
 ```
 
 Building the algorithm
