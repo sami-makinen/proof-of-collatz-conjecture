@@ -186,7 +186,7 @@ Step 2:
 ```
 f(f(n)) = f(3n + 1)
         = f(b?*00) || even
-	= b?*0     || M - 1
+        = b?*0     || M - 1
 ```
 
 Therefore,
