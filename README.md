@@ -59,80 +59,80 @@ The special symbol \* is used to present 0 or more bits in sequence. Thus, 1\* i
 
 The 01\* presents a sequence of bits where the 0 is followed by zero or more number of 1-bits. Similarly, 10\* presents a sequence of bits where the 1 is followed any number of 0-bits. The special symbol ? is used when the bit value is unknown. The ? can be either 0 or 1. The ?\* is sequence of any bits and has length of 0 or more.
 
-If 0 is added to ? the result is ?.  
+  If 0 is added to ? the result is ?.  
 
-If 1 is added to ? the result is 10\*, because if ? is 0, the result is 1 and, if ? is 1, the result is 10.  
+  If 1 is added to ? the result is 10\*, because if ? is 0, the result is 1 and, if ? is 1, the result is 10.  
 
-If ? is added to ? the result is ?\*, because the choices are: 0+0 = 0, 0+1 = 1, 1+0=1, 1+1=10.  
+  If ? is added to ? the result is ?\*, because the choices are: 0+0 = 0, 0+1 = 1, 1+0=1, 1+1=10.  
 
-If 0 is added to 01\* the result is 01\*.  
+  If 0 is added to 01\* the result is 01\*.  
 
-If 1 is added to 01\* the result is 10\*.  
+  If 1 is added to 01\* the result is 10\*.  
 
-If 0 is added to 10\* the result is 10\*.  
+  If 0 is added to 10\* the result is 10\*.  
 
-If 1 is added to 10\* the result is 10\*1.  
+  If 1 is added to 10\* the result is 10\*1.  
 
-if ? is added to 1\*, the result is 1\*?.
+  if ? is added to 1\*, the result is 1\*?.
 
 If 0, 1 or ? is added to ?\*, the result is ?\*. The adding of 0 won't change the binary sequence. The adding of 1 will change the binary sequence but because we don't know how, the result is ?\*.
 
 The notation n >> x means that the bits of n are shifted to the right x times. This is equal to division of n by $2^x$.
 
-n >> x = n / $2^x$
+  n >> x = n / $2^x$
 
 Some remarks about division by two (shifting to the right by 1). Notice: this would lead to rounding down, if pattern presents odd number.
 
-b1 >> 1 = b0
+  b1 >> 1 = b0
 
-b1\* >> 1 = b1\*
+  b1\* >> 1 = b1\*
 
-b1\*0 >> 1 = b1\*
+  b1\*0 >> 1 = b1\*
 
-b? >> 1 = b0
+  b? >> 1 = b0
 
-b?\* >> 1 = b?\*
+  b?\* >> 1 = b?\*
 
-b?0 >> 1 = b?
+  b?0 >> 1 = b?
 
-b?\*0 >> 1 = b?\*
+  b?\*0 >> 1 = b?\*
 
 The notation n << x means that the bits of n are shifted to the left x times. This is equal to multiplication of n by $2^x$.
 
-n << x = n \* $2^x$
+  n << x = n \* $2^x$
 
 Some remarks about multiplication by two (shifting to the left by 1).
 
-b1 << 1 = b10
+  b1 << 1 = b10
 
-b1\* << 1 = b1\*0.
+  b1\* << 1 = b1\*0.
 
-b? << 1 = ?0.
+  b? << 1 = ?0.
 
-b?\* << 1 = ?\*0.
+  b?\* << 1 = ?\*0.
 
 The minimum length of the bit string needed to present a number in binary presentation is called magnitude of the binary number and marked with M. The right-most 0s are ignored when calculating the
 magnitude. Thus, b000100 magnitude is 3 because the right-most three zeros are ignored.
 
 The magnitude M of bit string n is |n|. Simply, M = |n| Some rules about magnitude of n:
 
-|0| = 0
+  |0| = 0
 
-|1| = 1
+  |1| = 1
 
-|?| = 0 or 1
+  |?| = 0 or 1
 
-|0\*| = 0
+  |0\*| = 0
 
-|10\*| >= 1
+  |10\*| >= 1
 
-|1\*| >= 0
+  |1\*| >= 0
 
-|1?\*| >= 1
+  |1?\*| >= 1
 
-|1?\* << 1| = |1?\*| + 1
+  |1?\* << 1| = |1?\*| + 1
 
-|1?\* >> 1| = |1?\*| - 1
+  |1?\* >> 1| = |1?\*| - 1
 
 Insights of calculating f(n) with binary operations
 ---------------------------------------------------
@@ -152,22 +152,22 @@ Let a be the binary pattern of n. Because n is odd the LSB is 1.
 2n will result to ba0 = b?\*10, because of the shift left. By adding n will result to ?\*1, because LSB is set in n.
 
 ```
-  ?*10
-+  ?*1
-------
-   ?*1
+    ?*10
+  +  ?*1
+  ------
+     ?*1
 ```
 
 The f(n) contains adding one to 3n when n is odd. Now, that we know 3n is odd adding one will result to an even number.
 
 ```
-   ?*1
-+    1
-------
-  ?*10
+     ?*1
+  +    1
+  ------
+     ?*0
 ```
 
-When adding one to a binary number, the one is added to LSB of the number. If the LSB is one, the sum of bits would be more than binary numbers can present, so the result is carried over to the next bit in the number. If the next bit is one as well, the result is carried to next bit and so on. We say the adding of one propagates towards HSB. The carrying stops to first zero bit in the number. If all bits are ones, the size of the binary number increases with one bit and the HSB is one while other bits are zero. In other words,
+When adding one to a binary number, the one is added to LSB of the number. If the LSB is one, the sum of bits would be more than binary numbers can present, so the result is carried over to the next bit in the number. If the next bit is one as well, the result is carried to next bit and so on. We say the adding of one propagates towards HSB. The carrying stops to first zero bit in the number. If all bits are ones, the magnitude of the binary number increases with one bit and the HSB is one while other bits are zero. In other words,
 
 **Corollary**: `1* + 1 = 10*`
 
@@ -179,57 +179,92 @@ Building the algorithm
 
 The sole purpose of the algorithm is to help prove the conjecture. 
 
-The algorithm treats even numbers by dividing the number by two as in f(n). If the result of division is still even, we continue dividing as long the result is not even. We say the result is collapsed to even and use notation C(n) where pattern of n is 1?\*10\*. After C(n) = C(1?\*10\*) = 1?\*1
+The algorithm treats even numbers by dividing the number by two as in f(n). If the result of division is still even, we continue dividing as long the result is not even. We say the result is collapsed to even and use notation C(n) where pattern of n is 1?\*10\*. After C(n) = C(1?\*10\*) = 1?\*1. In notation C(n, x), x is used to specify number of times the division occurs. For example C(b?\*00, 2) means that division is done twice and, thus, C(b?\*00, 2) = b?).
 
 If the number is odd, the algorithm uses different step depending on the three lowest significant bits.  The three lowest bits are examined because we want to know whether the result is even or odd and, if the result can be collapsed. If the LSB is 1, the result is odd. If the LSB is 0, the result is even and can be divided by two.
 
-When n is odd the format is 1?\*1. If considering the three least significant bits we have following choices:
+When n is odd the format is 1?\*1. If considering the three least significant bits of an odd number, we have following choices:
 
   a) b001
+
   b) b011
+
   c) b101
+
   d) b111
 
-Let's check what happens to these when f(n) is applied to them.
+Let's check what happens to these when f(n) is applied to a)-d).
 
-a) The algorithm will halt for the result being one. Let's check still what happens to b001, if f(n) is applied to it:
+a) The algorithm will halt for the result being one. If f(n) is applied to b001:
 
 `f(b001) = 3 * b001 + 1 = b011 + 1 = b100`.
 
 The result is even and can be shifted twice to get odd number b1. In other words, to result is same.
- 
+
+  `C(b100, 2) = b1`
+
 If applied to a pattern of b1?\*001, the result would be
 
-`f(b1?\*001) = 3 \* b1?\*000 + b100 = b110?\*100`
+```
+n = b1?\*001
 
-and next steps would collapse it to b110?\*1. Then algorithm would pick one of a)-d) depending on last three bits b??1.
+f(b1?*001) = 3 * b1?*001 + 1
+= 3 * b1?*000 + 3 * b001 + 1
+= 3 * b1?*000 + b100
+= b110?*100`
+```
 
-b) `f(b011) = 3 \* b011 + 1 = b1001 + 1 = b1010`. 
+and next steps would collapse it to b110?\*1. Then algorithm would pick one of a)-d) depending on last three bits of b??1.
+
+b) `f(b011) = 3 * b011 + 1 = b1001 + 1 = b1010`. 
 
 The result is even and can be shifted once to get odd number b101. From c), we can see that b101 applying f(n) to it will result to b1.
 Notice, if the pattern is b1?\*011, adding one will propagate toward HSB and must be resolved as well.
 
-c) `f(b101) = 3 \* b101 + 1 = b1111 + 1 = b10000`. 
+c) `f(b101) = 3 * b101 + 1 = b1111 + 1 = b10000`. 
 
 The result is even and can be shifted four times to get odd number = b1. Notice, if the pattern is b1?\*101, adding one will propagate toward HSB and must be resolved as well.
 
-d) `f(b111) = 3 \* b111 + 1 = b10101 + 1 = b10110`. 
+d) `f(b111) = 3 * b111 + 1 = b10101 + 1 = b10110`. 
 
 The result is even and can be shifted once to get odd number n = b1011. The n can be split
 
+Let
 ```
-n = b1011 = b1000 + b011
-=> f(n) = 3n + 1 = 3 * (b1000 + b011) + 1 
-= 3 * b1000 + 3 * b011 + 1 
-= 3 * b1000 + f(b011)               | From b), we notice that f(b011) is equal to b101. 
-= 3 * b1000 + b101 = b11101
-
-f(b11101) = 3 * b11000 + 3 * b101 + 1 
-= 3 * b11000 + f(b101) 
-= 3 * b11000 + b10000 = b101000
+     n = b1011 = b1000 + b011
 ```
 
-Shifting b101000 three times will result to b101 and from c) we can conclude final result b1.
+Step 1:
+
+```
+  f(n) = 3n + 1
+       = 3 * (b1000 + b011) + 1 
+       = 3 * b1000 + 3 * b011 + 1 
+       = 3 * b1000 + b1010
+       = b100010
+```
+
+Step 2
+
+```
+  f(b100010) = b10001
+```
+
+Step 3:
+
+```
+  f(b10001) = 3 * b10000 + 3 * b001 + 1 
+            = b110000 + b110
+            = b110110
+```
+
+Step 4:
+
+```
+  f(b110110) = b11011
+```
+
+Shifting b110110 will result to b11011.
 
 Notice, if the pattern is b1?\*111, adding one will propagate toward HSB and must be resolved as well.
 
@@ -291,47 +326,55 @@ $f(n) = 3n+1  \quad \text{if } n \equiv 1 \pmod{2}$
 In lines 10-1: n is split to higher and lower parts
 
 ```
-r is higher parts
-a is lower parts
+  r is higher parts
+  a is lower parts
 
-n = n - a + a
-r = n - a => n = r + a
+  n = n - a + a
+  r = n - a => n = r + a
 
-3n + 1 = 3 * (n - a + a) + 1
-= 3 * (r + a) + 1
-= 3r + 3a + 1
+  3n + 1 = 3 * (n - a + a) + 1
+         = 3 * (r + a) + 1
+         = 3r + 3a + 1
 ```
 
 In lines 12-16: If a is 1 (b001)
 
 ```
-=> 3n + 1 = 3r + 3a + 1 
-= 3r + 3 + 1
-= 3r + 4           || 4 is b100
+        a = b001
+
+  3n + 1 = 3r + 3a + 1 
+         = 3r + 3 + 1
+         = 3r + 4           || 4 is b100
 ```
 
 In lines 18-22: If a is 3 (b011)
 
 ```
-=> 3n + 1 = 3r + 3a + 1
-= 3r + 9 + 1
-= 3r + 10          || 10 is b1010
+       a = b011
+       
+  3n + 1 = 3r + 3a + 1
+         = 3r + 9 + 1
+         = 3r + 10          || 10 is b1010
 ```
 
 In lines 24-30: If a is 5 (b101)
 
 ```
-=> 3n + 1 = 3r + 3a + 1
-= 3r + 15 + 1
-= 3r + 16          || 16 is b10000
+       a = b101
+       
+  3n + 1 = 3r + 3a + 1
+         = 3r + 15 + 1
+         = 3r + 16          || 16 is b10000
 ```
 
 In lines 32-36: If a is 7 (b111)
 
 ```
-=> 3n + 1 = 3r + 3a + 1
-= 3r + 21 + 1
-= 3r + 22           || 22 is b10110
+       a = b111
+      
+  3n + 1 = 3r + 3a + 1
+         = 3r + 21 + 1
+         = 3r + 22           || 22 is b10110
 ```
 
 Theorem 2 of the proof: The algorithm will stop when result is 1 for any input n
@@ -353,30 +396,30 @@ Proof:
 3\*n will increase the magnitude by one, but adding one does not. The addition will touch only the lowest three bits. Therefore, magnitude will remain the same or get smaller.
 
 ```
-n = b?*001
-M = |b?*001|
+  n = b?*001
+  M = |b?*001|
 ```
 
 Step 1: 
 
 ```
-f(n) = f(b?*001) = 3 * b?*001 + 1
-= 3 * b?*000 + b100
-= b?*000 + b100               || M + 1, from multiplication
-= b?*100                      || M + 0, from addition
+  f(n) = f(b?*001) = 3 * b?*001 + 1
+       = 3 * b?*000 + b100
+       = b?*000 + b100               || M + 1, from multiplication
+       = b?*100                      || M + 0, from addition
 ```
 
 Step 2: 
 
-`f(b?*100) = b?*10            || M - 1, from division`
+`  f(b?*100) = b?*10            || M - 1, from division`
 
 Step 3: 
 
-`f(b?*10) = b?*1              || M - 1, from division`
+`  f(b?*10) = b?*1              || M - 1, from division`
 
 Therefore,
 
-`|f(f(f(b?*001)))| = |b?*001| - 1`.
+`  |f(f(f(b?*001)))| = |b?*001| - 1`.
 
 b) with a = b011, there is two scenarios to be considered. Whether the addition of one in f(n) b.i) does increase the magnitude or b.ii) does not increases the magnitude.
 
@@ -391,19 +434,19 @@ In other words, the addition of one increases M by 1, iff 3r = b1\*000.
 Let
 
 ```
-n = b?*011
-3r = b1*000
+  n = b?*011
+  3r = b1*000
 ```
 
 and 
 
 ```
-f(n) = f(b?*011) = b?*011 * 3 + 1
-     = 3r + b1010
-     = b1*000 + b1010             || M + 1, from multiplication
-     = b10*010                    || M + 1, from addition
+  f(n) = f(b?*011) = b?*011 * 3 + 1
+       = 3r + b1010
+       = b1*000 + b1010             || M + 1, from multiplication
+       = b10*010                    || M + 1, from addition
 
-=> |f(b?*011)| = |b?*011| + 2
+  => |f(b?*011)| = |b?*011| + 2
 ```
 
 If 3r is not b1\*000, the bit pattern of 3r will contain at least one 0 before HSB. Even if the there is only one zero, the propagation of addition of one will stop.
@@ -411,24 +454,24 @@ If 3r is not b1\*000, the bit pattern of 3r will contain at least one 0 before H
 Let
 
 ```
-n = b?*011
-3r = b1*01*000
+  n = b?*011
+  3r = b1*01*000
 ```
 
 and 
 
 ```
-f(n) = f(b?*011) = b?*011 * 3 + 1
-     = 3r + b1010
-     = b1*01*000 + b1010          || M + 1, from multiplication
-     = b1*10*010                  || M + 0, from addition
+  f(n) = f(b?*011) = b?*011 * 3 + 1
+       = 3r + b1010
+       = b1*01*000 + b1010          || M + 1, from multiplication
+       = b1*10*010                  || M + 0, from addition
 ```
 
 Therefore,
 
 ```
-|f(b?*011)| = |b?*011| + 2  if 3r = b1*000
-|f(b?*011)| = |b?*011| + 1  if 3r = b1*01*000
+  |f(b?*011)| = |b?*011| + 2  if 3r = b1*000
+  |f(b?*011)| = |b?*011| + 1  if 3r = b1*01*000
 ```
 
 In b.i) let's assume the addition of one increases by one. Thus, 3r=b1*000.
@@ -436,19 +479,19 @@ In b.i) let's assume the addition of one increases by one. Thus, 3r=b1*000.
 Step 1:
 
 ```
-n = b?*011
-3r = b1*000
+  n = b?*011
+  3r = b1*000
 
-f(b?*011) = b10*010    || M+2, see above
+  f(b?*011) = b10*010    || M+2, see above
 ```
 
 Step 2: 
 
-`f(b10*010) = b10*01  || M - 1, from division`
+`  f(b10*010) = b10*01  || M - 1, from division`
 
 Step 3: 
 
-`see a)               || M - 1`
+`  see a)               || M - 1`
 
 
 After division the result is b10\*001, and again this pattern leads to magnitude decrease due the a = b001.  The step 3 will result to same pattern b10\*001 but with one 0 less. This will repeat until the pattern is b101 which is shown to be 1 after some more iterations.
@@ -466,26 +509,26 @@ The result is `f(b?*011) = 3*r + b1010`. If fourth bit of the 3\*r is not set, t
 Let 
 
 ```
-n = b?*011
-3r = b?*0000   || 4th bit not set after multiplication`
+   n = b?*011
+  3r = b?*0000   || 4th bit not set after multiplication`
 ```
 
 Step 1: 
 
 ```
-f(n) = f(b?*011) = b?*011 * 3 + 1
-     = 3r + b1010
-     = b?*0000 + b1010            || M + 1, from multiplication
-     = b?*1010                    || M + 0, from addition
+  f(n) = f(b?*011) = b?*011 * 3 + 1
+       = 3r + b1010
+       = b?*0000 + b1010            || M + 1, from multiplication
+       = b?*1010                    || M + 0, from addition
 ```
 
 Step 2:  
 
-`f(b?*1010) = b?*101         || M - 1, from division`
+`  f(b?*1010) = b?*101         || M - 1, from division`
 
 Therefore,
 
-`|f(f(b?*011))| = |b?*011|, if 3r = b?*0000 in the first step.`
+`  |f(f(b?*011))| = |b?*011|, if 3r = b?*0000 in the first step.`
 
 
 The `f(f(b?*011)) = b?*101` and magnitude stays same. From c) we can see that next step reduces the magnitude.
@@ -501,21 +544,21 @@ In that case 3\*r is b?\*01\*000.
 Let
 
 ```
-n=b?*101
-3*r = b?*01*000
+          n = b?*101
+        3*r = b?*01*000
 
-f(b?*101) = 3*r + b1010
-= b?*01*000` + b1010      || M + 1
-= b?*10*010
+  f(b?*101) = 3*r + b1010
+            = b?*01*000` + b1010      || M + 1
+            = b?*10*010
 ```
 
 Step 2:
 
-`f(b?*10*010) = b?*10*01   || M - 1`
+`  f(b?*10*010) = b?*10*01   || M - 1`
 
 Therefore,
 
-`|f(f(b?*101))| = |b?*101|  if 3r = b?*01*000 in the first step.`
+`  |f(f(b?*101))| = |b?*101|  if 3r = b?*01*000 in the first step.`
 
 c) with a = b101, 
 
@@ -526,31 +569,31 @@ Proof:
 Let
 
 ```
-n=b?*101
+  n=b?*101
 ```
 
 Step 1:
 
 ```
-f(n)=f(b?*101) = 3r + b10000
-= 3 * b?*000 + b10000   
-= b?*000                || M+1, from multiplication, if b?* contains a zero bit.
-                        || M+2, from multiplication and addition,if b?* = b1*, see below.
+  f(n)=f(b?*101) = 3r + b10000
+      = 3 * b?*000 + b10000   
+      = b?*000                || M+1, from multiplication, if b?* contains a zero bit.
+                              || M+2, from multiplication and addition,if b?* = b1*, see below.
 ```
 
 Steps 2-4:
 
 ```
-f(b?*000) = b?*00     || M-1, from division 
-f(b?*00) = b?*0       || M-1, from division 
-f(b?*0) = b?*         || M-1, from division
+  f(b?*000) = b?*00     || M-1, from division 
+  f(b?*00) = b?*0       || M-1, from division 
+  f(b?*0) = b?*         || M-1, from division
 
 => M+1-1-1-1 = M-2 
 ```
 
 The adding of one will increase magnitude, if 3r = b1\*000. This would lead to following pattern:
 
-`b1*000 + b10000 = 10*`
+`  b1*000 + b10000 = 10*`
 
 After collapse C(10*) the result is b1 and magnitude is 1. The algorithm stops.
 
@@ -565,27 +608,27 @@ d.a) If the fifth bit of the 3\*r is not set, the magnitude won't change. The ma
 Let
 
 ```
-n=b?*111
-3r=b?*0?000
+  n  = b?*111
+  3r = b?*0?000
 ```
 
 Step 1
 
 ```
-f(b?*111) = 3r + b10110
-= b?*0?000 + b10110         || M+1, from multiplication
-= b?*1?110                  || M+0, from addition
+  f(b?*111) = 3r + b10110
+            = b?*0?000 + b10110         || M+1, from multiplication
+            = b?*1?110                  || M+0, from addition
 ```
 
 Step 2
 
 ```
-f(b?*1?110) = b?*1?11       || M-1, from division
+  f(b?*1?110) = b?*1?11       || M-1, from division
 ```
 
 Therefore,
 
-`|f(f(b?*111))| = |b?*111|`
+`  |f(f(b?*111))| = |b?*111|`
 
 The result of d.a) is `f(f(b?*111)) = b?*1?11`. 
 
@@ -596,45 +639,45 @@ d.a.ii) If ? in result is 1, the pattern is b?\*1111.
 Let
 
 ```
-n=b?*1111
+  n=b?*1111
 ```
 
 Step 1
 ```
-f(b?*1111) = 3r + b10110
-           = 3 * b?*1000 + b10110
-           = b?*11110 + b10000      || M + 1, from multiplication
-	   = b?*01110 + b100000
+  f(b?*1111) = 3r + b10110
+             = 3 * b?*1000 + b10110
+             = b?*11110 + b10000      || M + 1, from multiplication
+             = b?*01110 + b100000
 ```
 
 Step 2
 
 ```
-f(f(b?*1111)) = f(b?*01110 + b100000)
-              = b?*0111 + b10000   || M - 1, from division
+  f(f(b?*1111)) = f(b?*01110 + b100000)
+                = b?*0111 + b10000   || M - 1, from division
 ```
 
 Step 3
 
 ```
-f(f(f(b?*1111))) = f(b?*0111 + b10000)
-                 = 3 * (b?*0111 + b10000) + 1
-		 = 3 * b?*0111 + 3 * b10000 + 1
-                 = b?*10110 + b110000   || M + 1, from multiplication. Note: 10110 + b110000 = 1000110
-		 = b?*00110 + 1000000
+  f(f(f(b?*1111))) = f(b?*0111 + b10000)
+                   = 3 * (b?*0111 + b10000) + 1
+                   = 3 * b?*0111 + 3 * b10000 + 1
+                   = b?*10110 + b110000   || M + 1, from multiplication. Note: 10110 + b110000 = 1000110
+                   = b?*00110 + 1000000
 ```
 
 Step 4
 
 ```
-f(f(f(f(b?*1111)))) = f(b?*00110 + b1000000)
-                    = b?*0011 + b100000  || M - 1, from division
+  f(f(f(f(b?*1111)))) = f(b?*00110 + b1000000)
+                      = b?*0011 + b100000  || M - 1, from division
 ```		 
 
 Therefore,
 
 ```
-|f(f(f(f(b?*1111))))| = |b?*1111|
+  |f(f(f(f(b?*1111))))| = |b?*1111|
 ```
 
 If all bits are ones after 5th bit the pattern is n=b1*?0011. Adding
@@ -648,21 +691,21 @@ d.b) If the fifth bit of the 3r is set, the addition probagates and increases on
 Let
 
 ```
-n=b?*111
-3r=b1*?000
+   n = b?*111
+  3r = b1*?000
 ```
 
 Step 1
 
 ```
-f(b?*111) = 3r + b10110
-= b1*?000 + b10110         || M + 1, from multiplication
-= b10*?110                 || M + 1, from addition`
+  f(b?*111) = 3r + b10110
+            = b1*?000 + b10110         || M + 1, from multiplication
+            = b10*?110                 || M + 1, from addition`
 ```
 
 Step 2
 
-`f(b10*?110) = b10*?11    || M - 1, from division`
+`  f(b10*?110) = b10*?11    || M - 1, from division`
 
 By further investigation,
 
@@ -671,19 +714,19 @@ d.b.i) In b10*?11, if ? = 0, then a = b011 and the fourth bit is not set, the ma
 Step 3 of d.b.i)
 
 ```
-n = b10*011         | from Step 2 and ? = 0
+     n = b10*011         | from Step 2 and ? = 0
 
-f(n) = 3n + 1
-     = 3 * b10*011 + 1
-     = 3 * b10*000 + b10000
-     = b110*10000            || M + 1, from multiplication
+  f(n) = 3n + 1
+       = 3 * b10*011 + 1
+       = 3 * b10*000 + b10000
+       = b110*10000            || M + 1, from multiplication
 ```
 
 Step 4 of d.b.i)
 
 Collapse four times 
 
-`C(b110*10000, 4) = b110*1 || M - 4`
+`  C(b110*10000, 4) = b110*1 || M - 4`
 
 Therefore, in d.b.i) the magnitude of n will decrease by 2.
 
@@ -692,64 +735,72 @@ d.b.ii) In b10*?11, If ? = 1, then a = b111 and the fifth bit is not set, the ma
 
 Step 3 of d.b.ii)
 
-`n = b10*111     | from Step 2 and ? = 1`
+`  n = b10*111     | from Step 2 and ? = 1`
 
 If there is no 0s in b10*111, then n = b1111
 
 Let's demonstrate how the algorithm processes b1111:
 
 ```
-n       r           a      +
-b1111
-        b1000       b111
-              * 3
-      = b11000
-                   	   + b10110
-= b101110
-          >> 1
-= b10111
-        b10000      b111
-               * 3
-      = b110000
-	                   + b10110
-= b1000110
-           >> 1
-= b100011
-        b100000     b011   
-               *3         + b1010
-= b11001010 >> 1
-= b1100101
-        b1100000    b101   
-	       *3         + b10000
-= b1001010000 >> 4
-= b100101
-        b100000     b101  
-                * 3       + b10000
-= b1110000 >> 4
-= b111
-        b0        b111  
-           *3          + b10110
-= b10110 >> 1
-= b1011
-       b1000      b011  
-             * 3       + b1010
-= b100010 >> 1
-= b10001
-       b10000       b001   
-              * 3      + b100
-= b110100 >> 2
-= b1101
-      b1000        b101   
-             *3        + b10000
-= b101000 >> 3
-= b101
-      b0           b101
-         * 3           + b10000
-= b10000 >> 4
-= b1
+  n       r           a      +
+  b1111
+          b1000       b111
+                * 3
+        = b11000
+                             + b10110
+  = b101110
+               >> 1
+  = b10111
+          b10000      b111
+                * 3
+       = b110000
+	                     + b10110
+  = b1000110
+               >> 1
+  = b100011
+          b100000     b011   
+                * 3          + b1010
+  = b11001010
+               >> 1
+  = b1100101
+          b1100000    b101   
+                * 3          + b10000
+  = b1001010000
+               >> 4
+  = b100101
+          b100000     b101  
+                * 3          + b10000
+  = b1110000
+               >> 4
+  = b111
+          b0          b111  
+                * 3          + b10110
+  = b10110
+               >> 1
+  = b1011
+          b1000       b011  
+                * 3          + b1010
+  = b100010
+               >> 1
+  = b10001
+         b10000       b001   
+                * 3          + b100
+  = b110100
+               >> 2
+  = b1101
+         b1000        b101   
+                * 3          + b10000
+  = b101000
+               >> 3
+  = b101
+         b0           b101
+                * 3          + b10000
+  = b10000
+               >> 4
+  = b1
 ```
 
-Let's show the same with one 0 in b10*111, then n = b10111. The process is presented in more compacted form:
+Let's show the same with one 0 in b10\*111, then n = b10111. The process is presented in more compacted form:
 
 ```
 n           r           a      +             M
@@ -764,7 +815,7 @@ b10000 >> 4                                 -4
 b1                                           1
 ```
 
-And for arbitrary number of 0s (more than one) in b10*111.
+And for arbitrary number of 0s (more than one) in b10\*111.
 
 ```
 n                 r                a       +            M
