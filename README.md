@@ -875,12 +875,12 @@ Step 1:
        = b11?*0000 + b1010             || M + 1, from multiplication
        = b11?*1010                     || M + 0, from addition
 
-      ? ? ?  1 1    carry
+      ? ? 0  0 0    carry
 --------------------
-  1 0 0 ? ?* 0 1 1 0
-+   1 0 0 ?* ? 0 1 1
+  1 0 0 ? ?* 0 0 0 0
++   1 0 0 ?* ? 0 0 0
 --------------------
-  1 1 ? ? ?* ? 0 0 1  = 11?*001
+  1 1 ? ? ?* ? 0 0 0  = 11?*000
 ```
 
 Step 2:  
@@ -1017,53 +1017,26 @@ c) with a = b101, we need to consider three cases
   c.ii) the multiplication increases |n| by one and addition does not increase magnitude,
   c.iii) the multiplication increases |n| by two,
 
-c.i) **Lemma**: `|f(f(3n+1))| <= |n| - 2, if n=10?*101`
 
-Proof:
+c.i) the case when the multiplication increases |n| by one and addition increases magnitude by one,
 
-Let
-
-```
-  n=b10?*101
-```
-
-Step 1:
-
-```
-  f(n)=f(b10?*101) = 3r + b10000
-      = 3 * b10?*000 + b10000   
-      = b110?*000 + b10000                || M + 1, from multiplication
-      = b11?*000                          || M + 0, from addition. The addition cannot propagate to
-                                                    HSB because at least one zero in 3r.
-```
-
-Steps 2-4:
-
-```
-  f(b11?*000) = b11?*00     || M-1, from division 
-  f(b11?*00) = b11?*0       || M-1, from division 
-  f(b11?*0) = b11?*         || M-1, from division
-
-=> M+1-1-1-1 = M-2 
-```
-
-c.ii) the case when the multiplication increases n by one and addition does not increase magnitude,
+The n must start with b101, in both b100 and b11 propagation is not possible.
 
 The adding of one will increase magnitude, if 3r = b1\*?000. This would lead to following pattern:
 
 Let
 
 ```
-n = b10?*101
+n = b101?*101         || with an assumption the multiplication increases magnitude by one
 M = |n|
 3r = b1*?000
 ```
 
 Step 1:
 ```
-f(n) = f(b10?*101)
+f(n) = f(b101?*101)
      = 3r + b10000
-     = b1*?000 + b10000  || M + 1, from multiplication
+     = b1*?000 + b10000  || M + 1, from assumption
      = b10*?000          || M + 1, from addition
 ```
 
@@ -1074,11 +1047,87 @@ f(f(f(b10*?000))) =  b10*?  || M-3, from division
 ```
 
 We notice that if lowest ? is 0, the division continues and after the collapse C(10*) the result is b1 and magnitude is 1. The algorithm stops.
-If lowest ? is 1, |f(f(f(f(b10?*101))))| = |b10?*101| - 1.
+If the lowest bit is 1,
+- and pattern starts with b100, the algorithm continues from a.i) and magnitude decreases.
+- and pattern starts with b101, the algorithm continues from a.ii.b) and magnitude decreases.
+
+
+##If lowest ? is 1, |f(f(f(f(b10?*101))))| = |b10?*101| - 1.
+
+
+c.ii) the case when the multiplication increases |n| by one and addition does not increase magnitude,
+
+c.ii.a) n=100?\*101
+
+**Lemma**: `|C(f(n), 3)| = |n| - 2, if n=100?*101`
+
+Proof:
+
+Let
+
+```
+  n=b100?*101
+```
+
+Step 1:
+
+```
+  f(n)=f(b100?*101) = 3r + b10000
+      = 3 * b100?*000 + b10000   
+      = b11?*000 + b10000                || M + 1, from multiplication
+      = b11?*000                         || M + 0, from addition. The addition cannot propagate to
+                                            HSB because at least one zero in 3r, see a.i) step 1.
+```
+
+Steps 2-4:
+
+```
+  f(b11?*000) = b11?*00     || M-1, from division 
+  f(b11?*00) = b11?*0       || M-1, from division 
+  f(b11?*0) = b11?*         || M-1, from division
+```
+
+Therefore,
+
+```
+|C(f(b100?*101), 3)| = |b100?*101| - 2
+```
+
+c.ii.b) n=101?\*101 with an assumption multiplication increases |n| by one.
+
+Let
+
+```
+n = 101?*101
+```
+
+Step 1:
+
+```
+f(101?*101) = 3 * 101?*101 + 1
+            = 3 * 101?*000 + b10000
+	    = b1111?*000 + b10000    || M + 1, see a.i)  TODO: exact ref
+	    = b1111?*000             || M + 0, from assumption. ?* must contain a zero to
+	                                prevent addition from propagation to HSB.
+```
+
+Steps 2-4:
+
+```
+C(1111?*000, 3) = 1111?*              || M - 3, from division
+```
+
+Therefore,
+
+```
+|C(f(b101?*101), 3)| = |b101?*101| - 2, with an assumption that multiplication increases |n| by one and addition does not increase |n|.
+```
 
 c.iii) the case when the multiplication increases n by two,
 
-**Lemma**: |f(f(f(f(b11?*101))))| = |b11?*101| - 1
+c.iii.a) n = b11?\*101
+
+**Lemma**: |C(f(b11?*101), 3)| = |b11?*101| - 1
 
 Proof:
 
@@ -1092,16 +1141,16 @@ Step 1:
 
 ```
   f(n)=f(b11?*101) = 3r + b10000
-      = 3 * b11?*000 + b10000   
-      = b1001?*000 + b10000               || M + 2, from multiplication
-      = b10?*000                          || M + 0, from addition. The addition cannot propagate to
-                                                    HSB because at least one zero in 3r.
+      = 3 * b11?*000 + b10000
+      = b10?*000 + b10000                 || M + 2, from multiplication, see a.ii.a)
+      = b1?*000                           || M + 0, from addition. The addition cannot propagate to
+                                             HSB because of b10?* contains a zero.
 ```
 
 Steps 2-4:
 
 ```
-f(f(f(b10?*000))) =  b10?*  || M-3, from division
+C(f(b10?*000), 3) =  b1?*  || M-3, from division
 ```
 
 Notice, if the lowest ? is 0, the next step is division and magnitude decreases by one more.
@@ -1109,7 +1158,42 @@ Notice, if the lowest ? is 0, the next step is division and magnitude decreases 
 Therefore,
 
 ```
-|f(f(f(f(b11?*101))))| = |b11?*101| - 1
+|C(f(b11?*101),3)| = |b11?*101| - 1
+```
+
+c.ii.b) n = b101?\*101
+
+**Lemma**: `|C(f(b101?*101),3)| = |b101?*101| - 1`
+
+Proof:
+
+Let
+
+```
+n = 101?*101
+```
+
+Step 1:
+
+```
+f(101?*101) = 3 * 101?*101 + 1
+            = 3 * 101?*000 + b10000
+	    = 1000?*000 + b10000     || M + 2, see a.ii.b)
+	    = 100?*000               || M + 0, from addition
+```
+
+Step 2-4:
+
+```
+C(f(b101?*101), 3) =  b100?*  || M-3, from division
+```
+
+Notice, while the lowest ? is 0, the next step is division and magnitude decreases by one on each iteration.
+
+Therefore,
+
+```
+|C(f(b101?*101),3)| = |b101?*101| - 1
 ```
 
 d) with a = b111 , we need to consider three cases
