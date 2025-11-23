@@ -718,44 +718,7 @@ Therefore,
 
 
 In case of a.ii.a) the magnitude does not change and there is a risk the algorithm would not stop and loop for eternity.
-From above we notice that f(f(f(b11?*001))) = b10?*1. The bit pattern has changed while the magnitude is still equal. Assume the lowest three bits are b001 after f(f(f(n). Because the highest two bits are now b10, the next step to be applied is either a.i) and magnitude decreases by one, or a.ii.b). 
-
-
-
-Let
-
-```
-n = b10?*001
-```
-
-Step 1:
-
-```
-f(b10?*001) = 3 * b10?*001 + 1
-            = 3 * b10?*000 + b100
-            = b110110?*000 + b100          || M + 1, from multiplication
-            = b110110?*100                 || M + 0, from addition
-
- ? ? ? ?             carry
---------------------
-   1 0 ?  ?* 0 0 0 0
- +   1 0  ?* ? 0 0 0
---------------------
- ? ? ? ?  ?  ? 0 0 0
-    
-```
-
-Steps 2-3:
-
-```
-f(f(b110110?*100)) = b110110?*1               || M-2, from division 
-```
-
-Therefore,
-
-```
-|f(f(f(f(f(f(n))))))| = |n| - 1, if n=b11?\*001 and f(f(f(n))) = b10010?*001.
-```
+From above we notice that f(f(f(b11?*001))) = b10?*1. The bit pattern has changed while the magnitude is still equal. Assume the lowest three bits are b001 after f(f(f(n). Because the highest two bits are now b10, the next step to be applied is either a.i) or a.ii.b) and magnitude decreases by one. 
 
 a.ii.b) If n = b101?*001 and the multiplication increases magnitude by two.
 
