@@ -5,6 +5,8 @@ The repository contains a proposal to prove Collatz conjecture using bit pattern
 16th of November 2025
 by Sami Mäkinen <sami.o.makinen@gmail.com> 
 
+**Important**: The proposal was posted to Reddit/Collatz at 22nd of Nov 2025 and after quick review a major defect was found from the proposal. I'm trying to fix the issue and repost the idea, if I success to fix it. The major issue is that I assumed calculation of 3n + 1 would lead to only magnitude increase by one, which can be easily shown that it can increase magnitude by two as well. I have also noticed that I've oversimplified the bit pattern multiplications and going through those carefully now. For now, I've worked with part a) of the third theorem in the proof and I think I've got it fixed. 
+
 Collatz conjecture
 ------------------
 
@@ -61,18 +63,49 @@ The 01\* presents a sequence of bits where the 0 is followed by zero or more num
 
 ```
 If 0 is added to ? the result is ?.  
-If 1 is added to ? the result is 10*, because if ? is 0, the result is 1 and,
-                                              if ? is 1, the result is 10.
-If ? is added to ? the result is ?*, because the choices are: 0+0 = 0, 0+1 = 1,
-                                                              1+0 = 1, 1+1 = 10.  
-If 0 is added to 01* the result is 01*.  
-If 1 is added to 01* the result is 10*.  
+If 1 is added to ? the result is ??, because if ? is 0, the result is 01 and,
+                                             if ? is 1, the result is 10.
+If ? is added to ? the result is ??, because the choices are: 0+0 = 00, 0+1 = 01,
+                                                              1+0 = 01, 1+1 = 10.  
+If 0 is added to 1* the result is 1*.  
+If 1 is added to 1* the result is 10*.  
 If 0 is added to 10* the result is 10*.  
 If 1 is added to 10* the result is 10*1.  
-if ? is added to 1*, the result is 1*?.
-If 0, 1 or ? is added to ?*, the result is ?*. The adding of 0 won't change
-    the binary sequence. The adding of 1 will change the binary sequence but
-    because we don't know how, the result is ?*.
+If ? is added to 1*, the result is 1?*. If ? is zero, 0 + 1* = 1*. If ? is one, 1+1* = 10*
+If 0 is added to ?*, the result is ?*.
+If 1 is added to ?*, the result is ??*. The adding of 1 will change the binary sequence but
+                                        because we don't know how, the result is ?*.
+					The ? in front emphasizes that adding one may carry over.
+If ? is added to ?*, the result is ??*.	The ? in front emphasizes that adding one may carry over.
+1+0+? = ??
+1+1+? = 1?   | 10 + ? = 1?
+1+?+? = ??   | 1+0+0=01, 1+0+1=10, 1+1+1=11
+?+?+? = ??
+
+b?* = b1?*     | The HSB is always 1.
+```
+
+If adding two bit patterns both containing ?* a care must be take to recognize potential carry of ? over to next bit.
+In the paper the adding of two bit patterns occur in calculation of 3n = 2n + n.
+So, the n is first shifted to the left and then added to the result. Now, if the pattern contains ?*, the position
+of ?* changes after the shifting.
+
+```
+n = 1?*0
+2n = 1?*00
+```
+
+If we add n to 2n, we expand ?* to have match ?* in the patterns:
+
+```
+  ? ? ? ? 0  0   carry
+-----------------
+    1 ? ? ?* 0 0      | = 2n
++     1 ? ?* ? 0      | = n
+-----------------
+  ? ? ? ? ?* ? 0      | = ?*0 = 1?*0, because HSB is always 1.
+
+=> 3 * 1?*0 = 1?*0
 ```
 
 The notation n >> x means that the bits of n are shifted to the right x times. This is equal to division of n by $2^x$.
@@ -162,37 +195,192 @@ When adding one to a binary number, the one is added to LSB of the number. If th
 
 **Corollary**: `M(1* + 1) = M(1*) + 1`
 
-**Lemma**: `|f(f(n))| = |n|, if n is odd and adding does not propagate on first step.`
+**Lemma**: `|n| <= |f(f(n))| <= |n| + 1, if n is odd`
 
 Proof:
+
+2n < 3n + 1 < 4n  with all n > 1
+2n = n << 1   || M + 1
+4n = n << 2   || M + 2
+
+The boundaries of magnitude change on 3n + 1 are clearly  1 and 2.
+
+To show that the change can be 2, let
+
+```
+n = b1*      || presents odd number with all bits set to 1
+
+3n = 2n + n
+   = b1*0 + b1*
+
+Because b1* has same magnitude
+
+   1111...11   carry
+------------- 
+   111....110
+ +  111...111
+-------------
+  10111...101
+```
+
+The result pattern is b101*01 and
+
+```
+|b101*01| = |b1*| + 2
+```
 
 Let
 
 ```
-n = b?*1      || n is any odd number
+n = b1*
 ```
 
 Step 1:
 
 ```
-f(n) = 3n + 1
-     = 3 * b?*1 + 1
-     = b?*11 + 1    || M + 1, from multiplication
-     = b?*00        || M + 0, from lemma
+f(b1*) = 3 * b1* + b1
+       = b101*01 + b1  || M + 2, from multiplication as shown above
+       = b101*10       || M + 0
 ```
 
 Step 2:
 
 ```
-f(f(n)) = f(3n + 1)
-        = f(b?*00) || even
-        = b?*0     || M - 1
+f(b101*10) = b101*1     || M - 1, from division
 ```
 
 Therefore,
 
 ```
-|f(f(b?*1))| = |b?*1| <=> |f(f(n))| = |n|, if n is odd and adding does not propagate on first step.
+|f(f(b1*))| = |b1*| + 1
+```
+
+**Lemma** |f(b11?*1)| = |b11?*1| + 2
+
+Proof:
+
+Assuming we want to minimize the change in the bit pattern, ?* should be all zeros.
+
+Thus, let
+
+```
+n = b110*1
+```
+
+First, let's check the result of 3n:
+
+```
+3 * b110*1 = b110*1 << 1 + b110*1
+           = b110*10 + b110*1
+	   = b10010*11
+
+  11         carry
+-------------
+  11000...010
+ + 1100...001
+-------------
+ 100100...011   || M + 2
+```
+
+Step 1:
+
+```
+f(b110*1) = 3 * b110*1 + 1
+          = b10010*11 + 1  || M + 2, from multiplication, see above.
+	  = b10010*101     || M + 0, adding does not propagate to HSB.
+```
+
+Therefore,
+
+```
+|f(b110*1)| = |b110*1| + 2
+```
+
+**Lemma** |f(b100?*1)| = |b100?*1| + 1
+
+Proof:
+
+From previous lemma the magnitude change by two will occur when ?\* == 11?\*.
+
+Let
+```
+n = b10011?*1
+
+f(b10011?*1) = 3 * b10011?*1 + 1
+             = b11?*1 + 1          || M + 1, from multiplication, see below.
+	     = b11?*0              || M + 0, from addition. Adding does not propagate to HSB,
+	                              because b11?*11 contains 0, see below.
+
+3n = 2n + n
+
+  0 0 ? c ? ? 0   carry
+-----------------
+  1 0 0 1 1?* 1 0
++   1 0 0 1 1?* 1
+-----------------
+  1 1 a b ??*?* 1     | Notation lacks impressiveness, so using a, b and c to present bits a, b, and c.
+                        Either a or b must be zero, depending if c is 0 or 1.
+                        a = 0 and b = 1  if c = 0
+                        a = 1 and b = 0  if c = 1
+```
+
+Therefore,
+
+```
+|f(b100?*1)| = |b100?*1| + 1
+```
+
+What about |f(b101?*1)|?
+
+**Lemma**: |f(b101?*1)| = |b101?*1| + 1 or |b101?*1| + 2
+
+Proof:
+
+From previous lemma the magnitude change by two will occur when ?\* == 11?\*.
+
+Let
+```
+n = b1011?*1
+
+f(b1011?*1) = 3 * b1011?*1 + 1
+            = b1000?*1 + 1     || M + 2, from multiplication
+            = b1000?*          || M + 0, from addition. Adding does not propagate to HSB,
+                                  because of 0s in b1000.
+
+ 1 1 1 1 ? ? 0   carry
+----------------
+   1 0 1 1?* 1 0
++    1 0 1 1?* 1
+----------------
+ 1 0 0 0 ??*?* 1
+```
+
+From previous lemma the multiplication increases magnitude by one on the left of pattern b00.
+From previous lemma the magnitude change by two will occur when ?\* == 11?\*.
+
+Let
+
+```
+n = b1010011?*1
+
+f(b1010011?*1) = 3 * b1010011?*1 + 1
+               = b111110?*1 + 1         || M + 1, from multiplication, see below.
+               = b111110?*              || M + 0, from addition. Adding does not propagate to HSB,
+	                                 because of 0 in b111110?*.
+
+           1 1 ? ?     carry
+---------------------- 
+   1 0 1 0 0 1 1?* 1 0
+ +   1 0 1 0 0 1 1?* 1
+----------------------
+   1 1 1 1 1 0 ? ??* 1
+```
+
+Therefore,
+
+```
+|f(b101?*1)| = |b101?*1| + 2   if |3 * 1?*| = |1?*1| + 2, or
+               |b101?*1| + 1   if |3 * 1?*| = |1?*1| + 1
 ```
 
 Building the algorithm
@@ -404,45 +592,219 @@ From lines 1, 5, 15, 21, 28, 35: The algorithm loops and sets n = f(n) in every 
 Theorem 3 of the proof: The algorithm will stop for any input n
 --------------------------------------------------------
 
-When algorithm calculates and sets n=f(n), the magnitude of n changes in every loop depending on n's the lower three bits in each iteration. The proof relies on the observation that magnitude of n may increase and decrease on iterations and after careful study, the magnitude will eventually decrease. Finally, the magnitude will reach 1 when n = 1.
+The proof relies on the observation that magnitude of n may increase and decrease on iterations and after careful study, the magnitude will eventually decrease. Finally, the magnitude will reach 1 when n = 1.
 
-a) with a = b001, 
+The idea is to show how bit string's length increases or decreases depending on lowest three bits when f(n) is applied to the number. Three bits helps to examine the changes in the number while the rest of the number is more or less anonymous patterns of bits. In the proposition the examination of changes in bit patterns form implicitly of state machine, because starting from one of the four introduced bit patterns, the stepping leads to an other start pattern or to 1. To make the idea work, the proposition should show that the length of bit strings will eventually decrease and reach 1.
 
-**Lemma**: |f(f(f(n)))| = |n| - 1, if n=b?\*001 
+When algorithm calculates and sets n=f(n), the magnitude of n changes. If n is even, the magnitude decreases by one because of division by two. If n is odd, the magnitude increases by one or two (lemma XX). 
+
+Each of the three-bit patterns a)-d) are examined separately and shown that after various number of steps the magnitude of n will decrease. In each case, we need to go through two main cases where n is odd and magnitude increases by one or by two. The main cases have bit patterns 100?*??1 and 11?*??1. The lowest three bits may be b001, b011, b101, and b111.
+
+```
+|f(b100?*??1)| = |b100?*??1| + 1
+|f(b101?*1)|   = |b101?*1| + 1 or |b101?*1| + 2
+|f(b11?*??1)|  = |b11?*??1| + 2
+```
+
+a) with a = b001, we must consider two cases where multiplication increases |n| a.i) by one and a.ii) by two.
+
+a.i) **Lemma**: |f(f(f(n)))| = |n| - 1, if n=b100?\*001 
 
 Proof:
 
 3\*n will increase the magnitude by one, but adding one does not. The addition will touch only the lowest three bits. Therefore, magnitude will remain the same or get smaller.
 
 ```
-  n = b?*001
-  M = |b?*001|
+  n = b100?*001
+  M = |n|
 ```
 
 Step 1: 
 
 ```
-  f(n) = f(b?*001) = 3 * b?*001 + 1
-       = 3 * b?*000 + b100
-       = b?*000 + b100               || M + 1, from multiplication
-       = b?*100                      || M + 0, from addition
+  f(n) = f(b100?*001) = 3 * b100?*001 + 1
+       = 3 * b100?*000 + b100
+       = b11?*000 + b100               || M + 1, from multiplication
+       = b11?*100                      || M + 0, from addition
+
+       ? c ? 0  0 0 0 0   carry
+----------------------
+   1 0 0 ? ? ?* 0 0 0 0
+     1 0 0 ? ?* ? 0 0 0
+----------------------
+   1 1 a b ? ?* ? 0 0 0            || a = ?, b = ?
+                                      if c = 0, a = 0 and b = 1
+                                      if c = 1, a = 1 and b = 0
+   
+```
+
+Steps 2-3: 
+
+```
+  f(b11?*100) = b11?*10            || M - 1, from division
+  f(b11?*10) = b11?*1              || M - 1, from division
+```
+
+Therefore,
+
+`  |f(f(f(b10?*001)))| = |b10?*001| - 1`.
+
+If n=b101?*001 with an assumption that the multiplication increases magnitude only by one, the magnitude decreases by one.
+
+Let
+
+```
+n=b101?*001
+```
+
+Step 1:
+
+```
+f(b101?*001) = 3* b101?*001 + 1
+             = b1111?*000 + b100   || M + 1, from multiplication, see below.
+	     = b1111?*100
+
+    0 0 0 0 ?  0 0 0  carry   | from assumption
+ -------------------  
+  1 0 1 0 ?* 0 0 0 0
++   1 0 1 ?* ? 0 0 0
+ -------------------
+  1 1 1 1 ?* ? 0 0 0 = 1111?*000
+
+```
+
+Step 2-3:
+
+```
+f(f(b1111?*100)) = b1111?*1        || M - 2, from division
+```
+
+a.ii) **Lemma**: |f(f(f(n)))| = |n|, if a.ii.a) n=b11?\*001 or a.ii.b) n = b101?\*001. In the case a.ii.b) with an assume the multiplication increases magnitude by two.
+
+a.ii.a)
+
+```
+  n = b11?*001
+  M = |b11?*001|
+```
+
+Step 1: 
+
+```
+  f(n) = f(b11?*001) = 3 * b11?*001 + 1
+       = 3 * b11?*000 + b100
+       = b10?*000 + b100             || M + 2, from multiplication
+       = b10?*100                    || M + 0, from addition
+
+   1 ? ? 0  0 0 0   carry
+-------------------
+   1 1 ? ?* 0 0 0 0
++    1 1 ?* ? 0 0 0
+-------------------
+ 1 0 ? ? ?* ? 0 0 0   = 10?*000
 ```
 
 Step 2: 
 
-`  f(b?*100) = b?*10            || M - 1, from division`
+`  f(b10?*100) = b10?*10          || M - 1, from division`
 
 Step 3: 
 
-`  f(b?*10) = b?*1              || M - 1, from division`
+`  f(b10?*10) = b10?*1            || M - 1, from division`
 
 Therefore,
 
-`  |f(f(f(b?*001)))| = |b?*001| - 1`.
+`  |f(f(f(b11?*001)))| = |b11?*001|`.
 
-b) with a = b011, there is two scenarios to be considered. Whether the addition of one in f(n) b.i) does increase the magnitude or b.ii) does not increases the magnitude.
 
-b.i) The case when the addition of one increases the magnitude:
+In case of a.ii.a) the magnitude does not change and there is a risk the algorithm would not stop and loop for eternity.
+From above we notice that f(f(f(b11?*001))) = b10?*1. The bit pattern has changed while the magnitude is still equal. Assume the lowest three bits are b001 after f(f(f(n). Because the highest two bits are now b10, the next step to be applied is either a.i) and magnitude decreases by one, or a.ii.b). 
+
+
+
+Let
+
+```
+n = b10?*001
+```
+
+Step 1:
+
+```
+f(b10?*001) = 3 * b10?*001 + 1
+            = 3 * b10?*000 + b100
+            = b110110?*000 + b100          || M + 1, from multiplication
+            = b110110?*100                 || M + 0, from addition
+
+ ? ? ? ?             carry
+--------------------
+   1 0 ?  ?* 0 0 0 0
+ +   1 0  ?* ? 0 0 0
+--------------------
+ ? ? ? ?  ?  ? 0 0 0
+    
+```
+
+Steps 2-3:
+
+```
+f(f(b110110?*100)) = b110110?*1               || M-2, from division 
+```
+
+Therefore,
+
+```
+|f(f(f(f(f(f(n))))))| = |n| - 1, if n=b11?\*001 and f(f(f(n))) = b10010?*001.
+```
+
+a.ii.b) If n = b101?*001 and the multiplication increases magnitude by two.
+
+Let
+
+```
+n = b101?*001
+M = |n|
+```
+
+Step 1:
+
+```
+f(b101?*001) = 3 * b101?*1 + 1
+             = 3 * b101?*000 + b100
+	     = 1000?*000 + b100   || M + 2, from assumption. See below.
+	     = 1000?*100          || M + 0, from addition
+
+
+  1 1 1 ? 0  0 0 0 0  carry   | from assumption
+ -------------------  
+  1 0 1 ? ?* 0 0 0 0
++   1 0 1 ?* ? 0 0 0
+ -------------------
+1 0 0 0 ? ?* ? 0 0 0 = 1000?*000
+
+```
+
+Steps 2-3:
+
+```
+f(f(1000?*100)) = 1000?*1       || M-2, from division 
+```
+
+Therefore, 
+
+`  |f(f(f(b101?*001)))| = |b101?*001|`.
+
+In case of a.ii.b) the magnitude does not change and there is a risk the algorithm would not stop and loop for eternity.
+From above we notice that f(f(f(b101?*001))) = b1000?*1. The bit pattern has changed while the magnitude is still equal. Assume the lowest three bits are b001 after f(f(f(n). Because the highest two bits are now b100, the next step to be applied is a.i) magnitude decreases by one.
+
+### CONTINUE FROM HERE!!!
+
+b) with a = b011, there is three scenarios to be considered:
+  b.i) the multiplication increases |n| by one and addition increases magnitude by one.
+  b.ii) the multiplication increases |n| by one and addition does not increase magnitude,
+  b.iii) the multiplication increases |n| by two.
+  
+b.i) The case when the multiplication increases n by one and addition increases magnitude by one.
 
 **Lemma**: If the fourth bit of the result of multiplication of r is set, the addition propagates and M increases by one only if all bits are set after the 3rd bit.  
 
@@ -453,19 +815,20 @@ In other words, the addition of one increases M by 1, iff 3r = b1\*000.
 Let
 
 ```
-  n = b?*011
+  n = 10?*011              || the highest bits are b10 because of assumption the multiplication won't increase the magnitude.
+  M = |10?*011|
   3r = b1*000
 ```
 
 and 
 
 ```
-  f(n) = f(b?*011) = b?*011 * 3 + 1
-       = 3r + b1010
+  f(n) = f(b10?*011) = b10?*011 * 3 + 1
+       = 3r + b1010                 || r = b10?*000
        = b1*000 + b1010             || M + 1, from multiplication
        = b10*010                    || M + 1, from addition
 
-  => |f(b?*011)| = |b?*011| + 2
+  => |f(b10?*011)| = |b10?*011| + 2
 ```
 
 If 3r is not b1\*000, the bit pattern of 3r will contain at least one 0 before HSB. Even if the there is only one zero, the propagation of addition of one will stop.
@@ -473,14 +836,14 @@ If 3r is not b1\*000, the bit pattern of 3r will contain at least one 0 before H
 Let
 
 ```
-  n = b?*011
+  n = b10?*011
   3r = b1*01*000
 ```
 
 and 
 
 ```
-  f(n) = f(b?*011) = b?*011 * 3 + 1
+  f(n) = f(b10?*011) = b10?*011 * 3 + 1
        = 3r + b1010
        = b1*01*000 + b1010          || M + 1, from multiplication
        = b1*10*010                  || M + 0, from addition
@@ -489,8 +852,8 @@ and
 Therefore,
 
 ```
-  |f(b?*011)| = |b?*011| + 2  if 3r = b1*000
-  |f(b?*011)| = |b?*011| + 1  if 3r = b1*01*000
+  |f(b10?*011)| = |b10?*011| + 2  if 3r = b1*000
+  |f(b10?*011)| = |b10?*011| + 1  if 3r = b1*01*000
 ```
 
 In b.i) let's assume the addition of one increases by one. Thus, 3r=b1*000.
@@ -498,10 +861,11 @@ In b.i) let's assume the addition of one increases by one. Thus, 3r=b1*000.
 Step 1:
 
 ```
-  n = b?*011
+  n = b10?*011
+  M = |n|
   3r = b1*000
 
-  f(b?*011) = b10*010    || M+2, see above
+  f(b10?*011) = b10*010    || M+2, see above
 ```
 
 Step 2: 
@@ -510,41 +874,41 @@ Step 2:
 
 Step 3: 
 
-`  see a)               || M - 1`
+`  see a.i)               || M - 1`
 
 
 After division the result is b10\*001, and again this pattern leads to magnitude decrease due the a = b001.  The step 3 will result to same pattern b10\*001 but with one 0 less. This will repeat until the pattern is b101 which is shown to be 1 after some more iterations.
 
 Therefore, in case of a = b011 when addition will propagate, the magnitude of n will start decreasing after third iteration and end to 1.
 
-b.ii) Case the addition of one does not increase the magnitude:
+b.ii) The case when the multiplication increases n by one and addition does not increase magnitude,
 
-**Lemma**: `|f(f(b?*011))| = |b?*011|, if adding does not propagate.`
+**Lemma**: `|f(f(b10?*011))| = |b10?*011|, if adding does not propagate.`
 
 Proof:
 
-The result is `f(b?*011) = 3*r + b1010`. If fourth bit of the 3\*r is not set, the magnitude won't change due adding 1.
+The result is `f(b10?*011) = 3*r + b1010`. If fourth bit of the 3\*r is not set, the magnitude won't change due adding 1.
 
 Let 
 
 ```
-   n = b?*011
-  3r = b?*0000   || 4th bit not set after multiplication`
+   n = b10?*011
+  3r = b110?*0000   || 4th bit not set after multiplication`
 ```
 
 Step 1: 
 
 ```
-  f(n) = f(b?*011) = b?*011 * 3 + 1
-       = 3r + b1010
-       = b?*0000 + b1010            || M + 1, from multiplication
-       = b?*1010                    || M + 0, from addition
+  f(n) = f(b10?*011) = b10?*011 * 3 + 1
+       = 3r + b1010                     || r = b10?*000
+       = b110?*0000 + b1010             || M + 1, from multiplication
+       = b110?*1010                     || M + 0, from addition
 ```
 
 Step 2:  
 
 ```
-  f(b?*1010) = b?*101         || M - 1, from division
+  f(b110?*1010) = b?*101                || M - 1, from division
 ```
 
 Therefore,
@@ -552,7 +916,7 @@ Therefore,
 `  |f(f(b?*011))| = |b?*011|, if 3r = b?*0000 in the first step.`
 
 
-The `f(f(b?*011)) = b?*101` and magnitude stays same. From c) we can see that next step reduces the magnitude.
+The `f(f(b10?*011)) = b110?*101` and magnitude stays same. From c) we can see that next step reduces the magnitude.
 
 The zero bit does not need to be 4th bit. The result is same if the zero bit is anywhere in the 3\*r result.
 
@@ -560,161 +924,259 @@ The zero bit does not need to be 4th bit. The result is same if the zero bit is 
 
 Proof:
 
-In that case 3\*r is b?\*01\*000.
+In that case 3\*r is b11?\*01\*000.
 
 Let
 
 ```
-          n = b?*101
-        3*r = b?*01*000
+          n = b10?*101
+        3*r = b11?*01*000
 
-  f(b?*101) = 3*r + b1010
-            = b?*01*000` + b1010      || M + 1
-            = b?*10*010
+  f(b10?*101) = 3*r + b1010
+              = b11?*01*000` + b1010      || M + 1, from multiplication
+              = b11?*10*010               || M + 0, from addition
 ```
 
 Step 2:
 
 ```
-  f(b?*10*010) = b?*10*01   || M - 1
+  f(b?*10*010) = b?*10*01                 || M - 1, from division
 ```
 
 Therefore,
 
 ```
-  |f(f(b?*101))| = |b?*101|  if 3r = b?*01*000 in the first step.
+  |f(f(b10?*101))| = |b10?*101|  if 3r = b11?*01*000 in the first step.
 ```
 
-c) with a = b101, 
+b.iii) the case when the multiplication increases |n| by two
 
-**Lemma**: `|f(f(3n+1))| <= |n| - 2, if n=?*101`
+Let 
+
+```
+   n = b11?*011
+   M = |n|
+```
+
+Step 1:
+
+```
+ f(b11?*011) = 3r + b1010            || r = b11?*000
+             = 3 * b11?*000 + b1010
+	     = b1001?*000 + b1010    || M + 2, from multiplication
+	     = b10?*010              || M + 0, from addition. The addition cannot propagate to
+                                               HSB because at least one zero in 3r.
+```
+
+Step 2:
+
+```
+f(b10?*010) = b10?*01               || M - 1, from division
+```
+
+If third lowest bit in b10?*01 is 0 (a=b001), the algorithm continues from a.i) and magnitude decreases.
+
+If third lowest bit in b10?*01 is 1 (a=b101), the algorithm continues from c.i) or c.ii) and magnitude decreases.
+
+c) with a = b101, we need to consider three cases
+  c.i) the multiplication increases |n| by one and addition increases magnitude by one.
+  c.ii) the multiplication increases |n| by one and addition does not increase magnitude,
+  c.iii) the multiplication increases |n| by two,
+
+c.i) **Lemma**: `|f(f(3n+1))| <= |n| - 2, if n=10?*101`
 
 Proof:
 
 Let
 
 ```
-  n=b?*101
+  n=b10?*101
 ```
 
 Step 1:
 
 ```
-  f(n)=f(b?*101) = 3r + b10000
-      = 3 * b?*000 + b10000   
-      = b?*000                || M+1, from multiplication, if b?* contains a zero bit.
-                              || M+2, from multiplication and addition,if b?* = b1*, see below.
+  f(n)=f(b10?*101) = 3r + b10000
+      = 3 * b10?*000 + b10000   
+      = b110?*000 + b10000                || M + 1, from multiplication
+      = b11?*000                          || M + 0, from addition. The addition cannot propagate to
+                                                    HSB because at least one zero in 3r.
 ```
 
 Steps 2-4:
 
 ```
-  f(b?*000) = b?*00     || M-1, from division 
-  f(b?*00) = b?*0       || M-1, from division 
-  f(b?*0) = b?*         || M-1, from division
+  f(b11?*000) = b11?*00     || M-1, from division 
+  f(b11?*00) = b11?*0       || M-1, from division 
+  f(b11?*0) = b11?*         || M-1, from division
 
 => M+1-1-1-1 = M-2 
 ```
 
-The adding of one will increase magnitude, if 3r = b1\*000. This would lead to following pattern:
+c.ii) the case when the multiplication increases n by one and addition does not increase magnitude,
 
-`  b1*000 + b10000 = 10*`
-
-After collapse C(10*) the result is b1 and magnitude is 1. The algorithm stops.
-
-d) with a = b111, 
-
-**Lemma**: `|f(f(3n+1))| = |n|, if n=b?*111.`
-
-In case of a = b111, f(n) = 3\*r + b10110.
-
-d.a) If the fifth bit of the 3\*r is not set, the magnitude won't change. The magnitude increase by multiplication is canceled by next step's division.
+The adding of one will increase magnitude, if 3r = b1\*?000. This would lead to following pattern:
 
 Let
 
 ```
-  n  = b?*111
-  3r = b?*0?000
+n = b10?*101
+M = |n|
+3r = b1*?000
+```
+
+Step 1:
+```
+f(n) = f(b10?*101)
+     = 3r + b10000
+     = b1*?000 + b10000  || M + 1, from multiplication
+     = b10*?000          || M + 1, from addition
+```
+
+Steps 2-4:
+
+```
+f(f(f(b10*?000))) =  b10*?  || M-3, from division
+```
+
+We notice that if lowest ? is 0, the division continues and after the collapse C(10*) the result is b1 and magnitude is 1. The algorithm stops.
+If lowest ? is 1, |f(f(f(f(b10?*101))))| = |b10?*101| - 1.
+
+c.iii) the case when the multiplication increases n by two,
+
+**Lemma**: |f(f(f(f(b11?*101))))| = |b11?*101| - 1
+
+Proof:
+
+Let
+
+```
+  n=b11?*101
 ```
 
 Step 1:
 
 ```
-  f(b?*111) = 3r + b10110
-            = b?*0?000 + b10110         || M+1, from multiplication
-            = b?*1?110                  || M+0, from addition
+  f(n)=f(b11?*101) = 3r + b10000
+      = 3 * b11?*000 + b10000   
+      = b1001?*000 + b10000               || M + 2, from multiplication
+      = b10?*000                          || M + 0, from addition. The addition cannot propagate to
+                                                    HSB because at least one zero in 3r.
 ```
 
-Step 2:
+Steps 2-4:
 
 ```
-  f(b?*1?110) = b?*1?11       || M-1, from division
+f(f(f(b10?*000))) =  b10?*  || M-3, from division
 ```
+
+Notice, if the lowest ? is 0, the next step is division and magnitude decreases by one more.
 
 Therefore,
 
 ```
-  |f(f(b?*111))| = |b?*111|
+|f(f(f(f(b11?*101))))| = |b11?*101| - 1
 ```
 
-The result of d.a) is `f(f(b?*111)) = b?*1?11`. 
+d) with a = b111 , we need to consider three cases
+  d.i) the multiplication increases |n| by one and addition increases magnitude by one.
+  d.ii) the multiplication increases |n| by one and addition does not increase magnitude,
+  d.iii) the multiplication increases |n| by two,
 
-d.a.i) If ? in result is 0, the pattern is b?\*1011 and the next step is b).
 
-d.a.ii) If ? in result is 1, the pattern is b?\*1111.
+d.i) **Lemma**: `|f(f(n))| = |n|, if n=b10?*111.`
+
+Proof:
 
 Let
 
 ```
-  n=b?*1111
+n = b10?*111
+M = |n|
 ```
 
 Step 1:
 
 ```
-  f(b?*1111) = 3r + b10110
-             = 3 * b?*1000 + b10110
-             = b?*11110 + b10000      || M + 1, from multiplication
-             = b?*01110 + b100000
+f(b10?*111) = 3r + b10110           || r = b10?*000
+            = 3 * b10?*000 + b10110
+            = b110?*000 + b10110    || M + 1, from multiplication
+      	    = b11?*110              || M + 0, from addition. The addition cannot propagate to
+                                       HSB because the third highest bit is zero even if ?* == 1*.
 ```
 
 Step 2:
 
 ```
-  f(f(b?*1111)) = f(b?*01110 + b100000)
-                = b?*0111 + b10000   || M - 1, from division
+f(f(b10?*111)) = f(b11?*110)
+               = b11?*11            || M - 1, from division
+```
+
+Therefore,
+
+`|f(f(b10?*111))| = |b10?*111|.
+
+The result of d.i) is `f(f(b10?*111)) = b11?*11`. 
+
+d.i.a) If third lowest bit in result is 0 (a=011), the pattern is b11?\*011 and the next step is b.iii).
+
+d.i.b) If third lowest bit in result is   (a=111), the pattern is b11?\*111 and the next step is d.iii).
+
+
+####
+**Lemma** Magnitude decreases by one after applying f(n) seven times to b110?\*1111.
+
+Proof:
+
+Let
+
+```
+  n = b110?*1111
+  M = |n|
+```
+
+Step 1:
+
+```
+  f(b110?*1111) = 3r + b10110
+                = 3 * b110?*1000 + b10110
+                = b10010?*11000 + b10110      || M + 2, from multiplication
+                = b10010?*01110               || M + 0, from addition
+#                = b10010?*01110 + b100000    || M + 0, from addition
+```
+
+Step 2:
+
+```
+  f(f(b11?*1111)) = f(b10010?*01110)
+                  = b10010?*0111              || M - 1, from division
 ```
 
 Step 3:
 
 ```
-  f(f(f(b?*1111))) = f(b?*0111 + b10000)
-                   = 3 * (b?*0111 + b10000) + 1
-                   = 3 * b?*0111 + 3 * b10000 + 1
-                   = b?*10110 + b110000   || M + 1, from multiplication. Note: 10110 + b110000 = 1000110
-                   = b?*00110 + 1000000
+  f(f(f(b?*1111))) = f(b10010?*0111)
+                   = 3 * b10010?*0000 + b10000
+		   = b110110?*0000 + b10000   || M + 2, from multiplication
+		   = b11011?*0000             || M + 0, from addition. The addition cannot propagate to
+                                                 HSB because at least one zero in 3r.
 ```
 
-Step 4:
+Steps 4-7:
 
 ```
-  f(f(f(f(b?*1111)))) = f(b?*00110 + b1000000)
-                      = b?*0011 + b100000  || M - 1, from division
-```		 
+C(b11011?*0000, 4) = b11011?*                || M - 4
+```
 
 Therefore,
 
-```
-  |f(f(f(f(b?*1111))))| = |b?*1111|
-```
+Magnitude decreases by one after applying f(n) seven times to b110?\*1111.
 
-If all bits are ones after 5th bit the pattern is n=b1*?0011. Adding
-b100000 would lead to `b1*?0011 + b100000 = 10*?0011`. Otherwise,
-`b?*0011 + b100000 = b?*0011`. In either case, stepping continues as
-in b) from which we can see the magnitude of n is reduced.
+#####
 
 
-d.b) If the fifth bit of the 3r is set, the addition probagates and increases only if all bits are set after the fourth bit. Notice, fourth bit may be 0 or 1. I.e.,
+d.ii) the case when the multiplication increases |n| by one and addition does not increase magnitude,
+If the fifth bit of the 3r is set, the addition probagates and increases only if all bits are set after the fourth bit. Notice, fourth bit may be 0 or 1. I.e.,
 
 Let
 
@@ -918,4 +1380,3 @@ Conclusion
 
 The designed algorithm calculates f(n), stops when f(n) results to 1, and stops for every natural number n > 0. 
 Therefore the Collatz conjecture is shown to be true for every $n \in N (> 0)$.
-
