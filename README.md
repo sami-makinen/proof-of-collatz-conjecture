@@ -5,10 +5,10 @@ The repository contains a proposal to prove Collatz conjecture using bit pattern
 16th of November 2025
 by Sami Mäkinen <sami.o.makinen@gmail.com> 
 
-> |IMPORTANT!| 
+> |!IMPORTANT| 
 > The proposal was posted to Reddit/Collatz at 22nd of Nov 2025 and after quick review a major defect was found from the proposal. I'm trying to fix the issue and repost the idea, if I success to fix it. The major issue is that I assumed calculation of 3n + 1 would lead to only magnitude increase by one, which can be easily shown that it can increase magnitude by two as well. I have also noticed that I've oversimplified the bit pattern multiplications and going through those carefully now. For now, I've worked with part a) of the third theorem in the proof and I think I've got it fixed. 
 
-> |NOTE!|
+> |!NOTE|
 > As of 24th of Nov 2025 I've rechecked the proposition and recalculated the results of each steps in proofs. I'm also taking into account the highest bits of the n and have shown for each case that the |n| will decrease after f(n) is applied repeadetly. The open question is still that whether the implicit state machine gets into a loop where the |n| does not get smaller. I'm working on that. 
 
 Collatz conjecture
