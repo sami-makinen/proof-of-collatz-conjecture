@@ -716,7 +716,7 @@ a) with a = b001, we must consider two cases where multiplication increases |n| 
 
 a.i) We have two choices, n=b100?\*001 or n=b101?\*001 with an assumption that the multiplication in step 1 increases |n| only by one.
 
-a.i.a) **Lemma 5**: `|f(f(f(n)))| = |n| - 1, if n=b100?\*001`
+a.i.a) **Lemma 5**: `|f(n, 3)| = |n| - 1, if n=b100?\*001`
 
 Proof:
 
@@ -761,7 +761,7 @@ Therefore,
 
 This completes proof of Lemma 5.
 
-a.i.b) **Lemma 6**: `|(f(n, 3)| = |n| - 1, if n=b101?\*001 with an assumption that the multiplication increases |n| by one in the first step.`
+a.i.b) **Lemma 6**: `|(f(n, 3)| = |n| - 1, if n=b101?\*001 and the multiplication increases |n| by one in the first step.`
 
 Let
 
@@ -794,7 +794,7 @@ f(f(b1111?*100)) = b1111?*1        || M - 2, from division
 Therefore,
 
 ```
-|C(f(n), 2)| = |n| - 1  if n=b101?\*001 with an assumption that the multiplication in step 1 increases |n| only by one.
+|f(n, 3)| = |n| - 1  if n=b101?\*001 and the multiplication in step 1 increases |n| by one.
 ```
 
 This completes the proof of Lemma 6.
@@ -802,6 +802,8 @@ This completes the proof of Lemma 6.
 a.ii) We need to consider to cases a.ii.a) n=b11?\*001 and a.ii.b) n=b101?\*001 with an assumption the multiplication increases |n| by two in the first step.
 
 a.ii.a) **Lemma 7**: `|f(f(f(n)))| = |n|, if n=b11?*001`
+
+Proof:
 
 Let
 
@@ -842,27 +844,27 @@ This completes the proof of Lemma 7.
 
 In case of a.ii.a) the magnitude does not change and there is a risk the algorithm would not stop and loop for eternity.
 
-From above we notice that f(f(f(b11?\*001))) = b10?\*1. The bit pattern has changed while the magnitude is still equal. 
+From above we notice that f(b11?\*001, 3) = b10?\*1. The bit pattern has changed while the magnitude is still equal. 
 
-Assume the lowest three bits are b001 after f(f(f(n):
-- a.i) If the highest three bits are b100 and, by Lemma 5, magnitude decreases by one.
-- a.i.b) If the highest three bits are b101, by Lemma 6, magnitude decreases by one. 
-- a.ii.b) If the highest three bits are b101, by Lemma 9, magnitude decreases by one. 
+Assume the lowest three bits are b001 after f(n ,3):
+- a.i) If the highest three bits are b100 and, by Lemma 5, |n| decreases by one after f(n, 3).
+- a.i.b) If the highest three bits are b101, by Lemma 6, |n| decreases by one after f(n, 3). 
+- a.ii.b) If the highest three bits are b101, by Corollary 8, |n| decreases by one after f(n, 6). 
 
 Therefore,
 
-**Corollary 6**: `If n=11?*001 and a=b001 after f(n,3), then |f(n, x)| = |n| - 1 where x is either 6 or 9.`
+**Corollary 6**: `|f(n, x={6 or 9})| = |n| - 1   if n=11?*001 and a=b001 after f(n,3).`
 
-To verify corollary see a.i) and a.i.b) x = 6 by Lemmas 7, 5 and 6, a.ii.b) x = 9 by Lemmas 7 and 9.
-
-Assume the lowest three bits of n=b10?\*1 are b011 after f(n,3):
-- b.ii.a) If the highest three bits are b100, then n=b100?\*011 and, by Lemma 11, |n| decreases by one.
+Assume the lowest three bits are b011 after f(n,3):
+- b.ii.a) If the highest three bits are b100, then n=b100?\*011 and, by Corollary 10, |n| decreases by one after f(n,10) or f(n, 13). TODO: recheck at the end
 - b.i) If the highest three bits are b101, by Corollary 8, magnitude decreases by one. 
 - a.ii.b) If the highest three bits are b101, by Lemma 9, magnitude decreases by one. 
 
 **Corollary 7**: `If n=11?*001 and a=b001 after f(n,3), then |f(n, x)| = |n| - 1 where x is either 6 or 9.`
 
-a.ii.b) **Lemma 8**: `|f(f(f(n)))| = |n|, if n = b101?*001 with an assumption the multiplication increases |n| by two in the first step`.
+a.ii.b) **Lemma 8**: `|f(f(f(n)))| = |n|, if n = b101?*001 and the multiplication increases |n| by two in the first step`.
+
+Proof:
 
 Let
 
@@ -906,7 +908,7 @@ From above we notice that `f(f(f(b101?*001))) = b1000?*1`. The bit pattern has c
 
 Therefore,
 
-**Lemma 9**: `|f(n, 6)| = |n| - 1, if n = b101?*001 with an assumption the multiplication increases |n| by two in the first step`.
+**Corollary 8**: `|f(n, 6)| = |n| - 1, if n = b101?*001 and the multiplication increases |n| by two in the first step`.
 
 b) with a = b011, there is three scenarios to be considered:
   b.i) the multiplication increases |n| by one and addition increases magnitude by one.
@@ -915,13 +917,13 @@ b) with a = b011, there is three scenarios to be considered:
   
 b.i) The case when the multiplication increases n by one and addition increases magnitude by one.
 
-**Lemma 10**: If the fourth bit of the result of multiplication of r is set, the addition propagates and M increases by one only if all bits are set after the 3rd bit.
+**Lemma 9**: If the fourth bit of the result of multiplication of r is set, the addition propagates and M increases by one only if all bits are set after the 3rd bit.
 
 Proof:
 
 In other words, the addition of one increases M by 1, iff 3r = b1\*000.
 
-Notice, if n=b100?\*1, from proof of Lemma 2, the addition does not propagate to HSB.
+Notice, if n=b100?\*1, from proof of Lemma 3, the addition does not propagate to HSB.
 Thus, we are using the other choice b101?\* with an assumption the multiplication increases magnitude by one.
 
 Let
@@ -948,7 +950,7 @@ Therefore,
 |f(b101?*011)| = |b101?*011| + 2  if 3r = b1*000 in the first step.
 ```
 
-This completes the proof of Lemma 10.
+This completes the proof of Lemma 9.
 
 Next, we have to show that magnitude will decrease on next steps.
 
@@ -974,13 +976,13 @@ Steps 3-5:
 
 Therefore, 
 
-**Corollary 8**: `|f(n, 5)| = |n| - 1, if n = 101?*011 with an assumption the multiplication increases magnitude by one in the first step.`
+**Corollary 9**: `|f(n, 5)| = |n| - 1, if n = 101?*011 with an assumption the multiplication increases magnitude by one in the first step.`
 
 After step 2 the result is b10\*001, and again this pattern leads to, by Lemma 5, magnitude decrease in steps 3-5 following a.i.a) (a = b001 and highest three bits are b100).
 
 b.ii) the case when the multiplication increases |n| by one and addition does not increase magnitude. In this case, |n| will remain same after f(f(n)), so we need to show how calculation proceeds in both b.ii.a) n=b100?\*011 and b.ii.b) b101?\*011.
 
-b.ii.a) **Lemma 11**: `|f(f(b100?*011))| = |b100?*011|`
+b.ii.a) **Lemma 10**: `|f(f(b100?*011))| = |b100?*011|`
 
 From Lemma 2 we the addition does not propagate, if n=b100?*011 in the first step.
 
@@ -1017,16 +1019,17 @@ Therefore,
 
 `  |f(f(b100?*011))| = |b100?*011|`
 
+This completes the proof of Lemma 10.
 
 The `f(f(b100?*011)) = b11?*01` and magnitude stays same. 
 - if a=001, then, n=b11?\*001 and, by Corollary 6, `f(b100?*011,x) = |b100?*011| - 1, where x=8 or x=11.`
 - if a=101, then, n=b11?\*101 and, by Lemma 7, 
 
-**Corollary 9**: `|f(b100?*011, x)| = |b100?*011| - 1 where x=10 or x=13` 
+**Corollary 10**: `|f(b100?*011, x)| = |b100?*011| - 1 where x=10 or x=13` 
 
 From c) we can see that next step reduces the magnitude. TODO: which of c.x) parts?
 
-b.ii.b)
+b.ii.b) **Lemma 11**: 
 
 If 3r is not b1\*000, the bit pattern of 3r will contain at least one 0 before HSB. Even if the there is only one zero, the propagation of addition of one will stop.
 
@@ -1054,6 +1057,7 @@ Therefore,
   |f(b100?*011)| = |b100?*011| + 1  from lemma 2.
 ```
 
+This completes the proof of Lemma 11.
 
 The zero bit does not need to be 4th bit. The result is same if the zero bit is anywhere in the 3\*r result.
 
@@ -1090,7 +1094,7 @@ This completes the proof of Lemma 12.
 
 The `f(f(b100?*011)) = b11?*101` and magnitude stays same. From c.iii.a) we can see that next step reduces the |n| by one. 
 
-**Corollary XX**: `|f(b100?*011, 6) = |b100?*011| - 1`, by Lemma 12 and Lemma 14.
+**Corollary 11**: `|f(b100?*011, 6) = |b100?*011| - 1`, by Lemma 12 and Lemma 14.
 
 b.iii) the case when the multiplication increases |n| by two:
   b.iii.a) n=11?\*011,
@@ -1112,8 +1116,8 @@ Step 1:
 ```
  f(b11?*011) = 3r + b1010            || r = b11?*000
              = 3 * b11?*000 + b1010
-	     = b10?*000 + b1010      || M + 2, from multiplication, see also a.ii.a)
-	     = b1?*010               || M + 0, from addition. The addition cannot propagate to
+             = b10?*000 + b1010      || M + 2, from multiplication, see also a.ii.a)
+             = b1?*010               || M + 0, from addition. The addition cannot propagate to
                                                HSB because of b10?* has zero.
 ```
 
@@ -1141,7 +1145,11 @@ If third lowest bit in b1?*01 is 1 (a=b101),
 - and the pattern starts with b101, the algorithm continues from c.i) or c.ii) and magnitude decreases. TODO: check this.
 - and the pattern starts with b11, the algorithm continues from c.i) or c.ii) and magnitude decreases. TODO: check this.
 
-b.iii.b)
+**Corollary 12**: TODO: add
+
+b.iii.b) **Lemma 14*: `|f(f(b101?*011))| = |b101?*011| + 1 if multiplication increases |n| by two in the first step.`
+
+Proof:
 
 Let 
 
@@ -1155,8 +1163,8 @@ Step 1:
 ```
  f(b101?*011) = 3r + b1010            || r = b11?*000
               = 3 * b101?*000 + b1010
-	      = b1000?*000 + b1010    || M + 2, from multiplication, see below.
-	      = b100?*010             || M + 0, from addition. The addition cannot propagate to
+              = b1000?*000 + b1010    || M + 2, from multiplication, see below.
+              = b100?*010             || M + 0, from addition. The addition cannot propagate to
                                          HSB because of b1000?* contains zero.
 
  1 1 1 1 ? ? 0  0 0 0   carry
@@ -1179,9 +1187,13 @@ Therefore,
 |f(f(b101?*011))| = |b101?*011| + 1 when multiplication increases magnitude by two in the first step.
 ```
 
+This completes the proof of Lemma 14.
+
 The pattern starts with b100
 - and the lowest three bits are b001, the algorithm continues from a.i) and magnitude decreases.
 - and the lowest three bits are b101, the algorithm continues from c.X) and magnitude decreases. TODO: check c.X).
+
+**Corollary 13**: 
 
 c) with a = b101, we need to consider three cases
   c.i) the multiplication increases |n| by one and addition increases magnitude by one.
@@ -1189,7 +1201,7 @@ c) with a = b101, we need to consider three cases
   c.iii) the multiplication increases |n| by two,
 
 
-c.i) the case when the multiplication increases |n| by one and addition increases magnitude by one,
+c.i) **Lemma 15**: `|f(n), 4)| = |n| - 1, if n=b101?*101 and the multiplication increases |n| by one and addition increases |n| by one in the first step.`
 
 The n must start with b101, in both b100 and b11 propagation is not possible.
 
@@ -1218,18 +1230,22 @@ Steps 2-4:
 f(f(f(b10*?000))) =  b10*?  || M-3, from division
 ```
 
+Therefore
+
+`|f(b101?*101, 4)| = |b101?*101| - 1 and the multiplication increases |n| by one and addition increases |n| by one in the first step.`
+
+This completes the proof of Lemma 15.
+
 We notice that if lowest ? is 0, the division continues and after the collapse C(10*) the result is b1 and magnitude is 1. The algorithm stops.
 If the lowest bit is 1,
 - and pattern starts with b100, the algorithm continues from a.i) and magnitude decreases.
 - and pattern starts with b101, the algorithm continues from a.ii.b) and magnitude decreases.
 
-
-##If lowest ? is 1, |f(f(f(f(b10?*101))))| = |b10?*101| - 1.
-
+**Corollary 14**: TODO: add
 
 c.ii) the case when the multiplication increases |n| by one and addition does not increase magnitude,
 
-c.ii.a) **Lemma 14**: `|C(f(n), 3)| = |n| - 2, if n=100?*101`
+c.ii.a) **Lemma 16**: `|(f(n, 4)| = |n| - 2, if n=100?*101`
 
 Proof:
 
@@ -1243,7 +1259,7 @@ Step 1:
 
 ```
   f(n)=f(b100?*101) = 3r + b10000
-      = 3 * b100?*000 + b10000   
+      = 3 * b100?*000 + b10000 
       = b11?*000 + b10000                || M + 1, from multiplication
       = b11?*000                         || M + 0, from addition. The addition cannot propagate to
                                             HSB because at least one zero in 3r, see a.i) step 1.
@@ -1260,12 +1276,14 @@ Steps 2-4:
 Therefore,
 
 ```
-|C(f(b100?*101), 3)| = |b100?*101| - 2
+|f(b100?*101, 4)| = |b100?*101| - 2
 ```
 
-This completes proof of Lemma 14.
+This completes proof of Lemma 16.
 
-c.ii.b) **Lemma 15**: `|C(f(b101?*101), 3)| = |b101?*101| - 2, with an assumption that multiplication increases |n| by one and addition does not increase |n| in the first step.`
+c.ii.b) **Lemma 17**: `|f(n, 4)| = |n| - 2, if n=b101?*101 and the multiplication increases |n| by one and addition does not increase |n| in the first step.`
+
+Proof:
 
 Let
 
@@ -1292,14 +1310,14 @@ C(1111?*000, 3) = 1111?*              || M - 3, from division
 Therefore,
 
 ```
-|C(f(b101?*101), 3)| = |b101?*101| - 2, with an assumption that multiplication increases |n| by one and addition does not increase |n| in the first step.
+|f(b101?*101, 4)| = |b101?*101| - 2, with an assumption that multiplication increases |n| by one and addition does not increase |n| in the first step.
 ```
 
-This completes the proof of Lemma 15.
+This completes the proof of Lemma 17.
 
 c.iii) the case when the multiplication increases n by two,
 
-c.iii.a) **Lemma 16**: `|C(f(b11?*101), 3)| = |b11?*101| - 1`
+c.iii.a) **Lemma 18**: `|f(n, 4)| = |n| - 1  if n=b11?*101`
 
 Proof:
 
@@ -1330,12 +1348,12 @@ Notice, if the lowest ? is 0, the next step is division and magnitude decreases 
 Therefore,
 
 ```
-|C(f(b11?*101),3)| = |b11?*101| - 1
+|f(b11?*101,4)| = |b11?*101| - 1
 ```
 
-This completes the proof of Lemma 16.
+This completes the proof of Lemma 18.
 
-c.ii.b) **Lemma 17**: `|C(f(b101?*101),3)| = |b101?*101| - 1`
+c.ii.b) **Lemma 19**: `|f(n,4)| = |n| - 1  if n=b101?*101`
 
 Proof:
 
@@ -1365,19 +1383,21 @@ Notice, while the lowest ? is 0, the next step is division and magnitude decreas
 Therefore,
 
 ```
-|C(f(b101?*101),3)| = |b101?*101| - 1
+|f(b101?*101,4)| = |b101?*101| - 1
 ```
 
-This completes the proof of Lemma 17.
+This completes the proof of Lemma 19.
 
 d) with a = b111 , we need to consider three cases
   d.i) the multiplication increases |n| by one and addition increases magnitude by one.
   d.ii) the multiplication increases |n| by one and addition does not increase magnitude,
   d.iii) the multiplication increases |n| by two,
 
-d.i) **Lemma 18**: `|f(f(b101?*111))| = |b101?*111| + 1 with an assumption the multiplication increases |n| by one and addition increases |n| by one in the first step.`
+d.i) **Lemma 20**: `|f(f(n))| = |n| + 1 if n=b101?*111 and the multiplication increases |n| by one and addition increases |n| by one in the first step.`
 
 The n must start with b101, in both b100 and b11 addition propagation is not possible.
+
+Proof:
 
 Let
 
@@ -1408,17 +1428,21 @@ Therefore,
 |f(f(b101?*111))| = |b101?*111| + 1
 ```
 
-This completes the proof of Lemma 18.
+This completes the proof of Lemma 20.
 
 The next step depends on n=b10*?11 third lowest bit. n starts with b100.
 - If a=b011, the next step is from b.ii).
 - If a=b111, the next step is from d.ii).
 
+**Corollary 15**: TODO: add
+
 d.ii) the multiplication increases |n| by one and addition does not increase magnitude,
 
-d.ii.a) **Lemma**: `|f(f(b100?*111))| = |b100?*111| with an assumption that addition in the first step does not increase |n|.`
+d.ii.a) **Corollary 16**: `|f(f(b100?*111))| = |b100?*111|`
 
-TODO: add new phase for b100?*111 when addition increases |n| to complete the state machine.
+By Lemma 3.
+
+Because magnitude remains same, we need to check the next steps to see if the magnitude decreases.
 
 Let
 
@@ -1432,7 +1456,7 @@ Step 1:
 f(b100?*111) = 3* b100?*111 + 1
              = 3r + b1010            || r=b100?*000
              = b11?*000 + b1010      || M + 1, from multiplication
-	     = b11?*010              || M + 0, from assumption
+             = b11?*010              || M + 0, from assumption
 ```
 
 Step 2:
@@ -1441,17 +1465,15 @@ Step 2:
 f(f(b100?*111)) = b11?*01            || M - 1, from division
 ```
 
-Therefore,
-
-```
-|f(f(b100?*111))| = |b100?*111|
-```
-
-Next step depends on third lowest bit on b11?*01.
+Thus, `f(f(b100?*111)) = b11?*01` and next step depends on third lowest bit on b11?*01.
 - If a=b011, the next step is from b.iii.a).
 - If a=b111, the next step is from d.iii.a).
 
-d.ii.b) n = b101?*111 with an assumption multiplication in the first step increases |n| by one and addition does not increase |n|.
+**Corollary 17**: TODO: add
+
+d.ii.b) **Lemma 21**: `|f(f(b101?*111))| = |b101?*111| + 1`
+
+n = b101?*111 with an assumption multiplication in the first step increases |n| by one and addition does not increase |n|.
 
 Let
 
@@ -1465,8 +1487,8 @@ Step 1:
 ```
 f(b101?*111) = 3 * b101?*111 + 1
              = 3 * b101?*000 + b10110
-	     = b1111?*000 + b10110   || M + 2, from assumption, see a.i.b)
-	     = b1111?*110            || M + 0, from assumption
+             = b1111?*000 + b10110   || M + 2, from assumption, see a.i.b)
+             = b1111?*110            || M + 0, from assumption
 ```
 
 Step 2:
@@ -1480,13 +1502,20 @@ Therefore,
 ```
 |f(f(b101?*111))| = |b101?*111| + 1
 ```
+
+This completes the proof of Lemma 21.
+
 Next step depends on third lowest bit on b1111?*11.
 - If a=b011, the next step is from b.iii.a).
 - If a=b111, the next step is from d.iii.a).
 
+**Corollary 18**: TODO: add
+
 d.iii) the multiplication increases |n| by two,
 
-d.iii.a) n=b11?*111
+d.iii.a) **Lemma 22**: `|f(f(n))| = |n| + 1   if n=b11?*111`
+
+Proof:
 
 Let
 
@@ -1517,6 +1546,8 @@ Therefore,
 |f(f(b11?*111))| = |b11?*111| + 1
 ```
 
+This completes the proof of Lemma 22.
+
 On the next step n=b1?*11. This looks terrible and may lead to infinite loop with |n| increasing constantly. Let's verify how the 3n+1 is calculated on first step.
 
 ```
@@ -1535,29 +1566,23 @@ On the next step n=b1?*11. This looks terrible and may lead to infinite loop wit
          1 0 1 1 0
   ----------------
   1 ? ?* ? ? 1 1 0 = 1?*110    || something wrong with this?
-
-      ? 
-  ------------------
-    1 0 ?* ? 0 0 0
-    0 0 1  0 1 1 0
-  ------------------
-    1 ? ? ?* ? 1 1 0 = 1?*110    || something wrong with this?
-
 ```
 
 On the next step n = 10?*101. Now the choices are:
 - if the pattern starts with b100, the processing continues from c.i) and magnitude decreases.
 - if the pattern starts with b101, the processing continues from either from c.i) or c.ii.b) and magnitude decreases. TODO: check refs
 
-d.iii.b) n=b101?*111 with an assumption multiplication increases |n| by two in the first step.
+**Corollary 19**: TODO: add
 
-**Lemma**: `|f(f(n))| = |n|+1, if n=b101?*111 and multiplication increases |n| by two in the first step.`
+d.iii.b) **Lemma 23**: `|f(f(n))| = |n|+1, if n=b101?*111 and multiplication increases |n| by two in the first step.`
+
+Proof:
 
 Let
 
 ```
-n=b101?*111 with an assumption multiplication increases |n| by two in the first step.
-M=|n|
+n = b101?*111    with an assumption multiplication increases |n| by two in the first step.
+M = |n|
 ```
 
 Step 1:
@@ -1565,8 +1590,8 @@ Step 1:
 ```
 f(101?*101) = 3 * 101?*111 + 1
             = 3 * 101?*000 + b10110
-	    = 1000?*000 + b10110     || M + 2, from assumption, see a.ii.b)
-	    = 10?*110                || M + 0, from addition
+            = 1000?*000 + b10110     || M + 2, from assumption, see a.ii.b)
+            = 10?*110                || M + 0, from addition
 
       ? 0 0  0 0   carry
 ------------------
@@ -1588,12 +1613,56 @@ Therefore,
 |f(f(101?*101))| = |101?*101| + 1  if multiplication increases |n| by two in the first step.
 ```
 
+This completes the proof of Lemma 23.
+
 On the next step n = 10?*11 and the choices are:
 - if the pattern starts with b100 and a=011, the processing continues from b.i) and magnitude decreases.
 - if the pattern starts with b100 and a=111, the processing continues from d.i) and magnitude decreases.
 - if the pattern starts with b101 and a=011, the processing continues from either from b.i) or b.ii.b) and magnitude decreases. TODO: check ref
 - if the pattern starts with b101 and a=111, the processing continues from either from d.i) or d.ii.b) and magnitude decreases. TODO: check ref
 
+**Corollary 20**: TODO: add
+
+Summary of a)-d) 
+----------------
+
+> [!NOTE]
+> Needs update.
+
+```
+a)      |f(f(f(n)))| = |n| - 1, if n=b?*001
+
+b.i)    |f(b?*011)| = |b?*011| + 2          if addition of one increases M by 1
+        |f(f(b?*011))| = |b?*011| + 1       if addition of one increases M by 1
+        f(f(b?*011)) = b10*01               next step is to repeat a) as long as lowest bits are b001, each repeation reduces M by 1.
+                                            repeat until the pattern is b101 which is shown to be 1 after some more iterations.
+					    
+b.ii)   |f(b?*011)| = |b?*011| + 1          if addition does not increase M by 1
+        |f(f(b?*011))| = |b?*011|           if adding does not propagate.
+        f(f(b?*011)) = b?*101               next step is to apply c) to this pattern
+
+c)      |f(f(f(f(b?*101))))| = |?*101| - 2  if ?* contains at least one zero before HSB. 
+        C(f(b?*101)) = 1                    if ?* == 1*
+
+d.a)    |f(f(?*111))| = |?*111|             if the fifth bit of the 3r is not set.
+         f(f(b?*111)) = b?*1?11
+
+d.a.i)  If ? in result is 0, the pattern is b?*1011 and the next step is b).
+
+d.a.ii) If ? in result is 1, the pattern is b?*1111.
+        |f(f(f(f(b?*1111))))| = |b?*1111|
+          f(f(f(f(b?*1111)))) = b?*0011          next step is b).
+
+d.b)  |f(f(b?*111))| = |b?*111| + 1
+        f(f(b?*111)) = b10*?11
+
+d.b.i) |C(f(f(f(b?*111))), 4)| = |b?*111| - 2
+
+d.b.ii) the algorithm stops at 1 or the magnitude is reduced by three in total.
+```
+
+Experimental results
+--------------------
 
 Let's demonstrate how the algorithm processes b1111:
 
@@ -1614,37 +1683,37 @@ Let's demonstrate how the algorithm processes b1111:
   = b1000110
                >> 1
   = b100011
-          b100000     b011   
+          b100000     b011
                 * 3          + b1010
   = b11001010
                >> 1
   = b1100101
-          b1100000    b101   
+          b1100000    b101
                 * 3          + b10000
   = b1001010000
                >> 4
   = b100101
-          b100000     b101  
+          b100000     b101 
                 * 3          + b10000
   = b1110000
                >> 4
   = b111
-          b0          b111  
+          b0          b111 
                 * 3          + b10110
   = b10110
                >> 1
   = b1011
-          b1000       b011  
+          b1000       b011 
                 * 3          + b1010
   = b100010
                >> 1
   = b10001
-         b10000       b001   
+         b10000       b001
                 * 3          + b100
   = b110100
                >> 2
   = b1101
-         b1000        b101   
+         b1000        b101 
                 * 3          + b10000
   = b101000
                >> 3
@@ -1701,39 +1770,6 @@ f(n) = 3n + 1
      = b110*10110              || M + 1, from multiplication
 ```
 
-Summary of a)-d) 
-
-```
-a)      |f(f(f(n)))| = |n| - 1, if n=b?*001
-
-b.i)    |f(b?*011)| = |b?*011| + 2          if addition of one increases M by 1
-        |f(f(b?*011))| = |b?*011| + 1       if addition of one increases M by 1
-        f(f(b?*011)) = b10*01               next step is to repeat a) as long as lowest bits are b001, each repeation reduces M by 1.
-                                            repeat until the pattern is b101 which is shown to be 1 after some more iterations.
-					    
-b.ii)   |f(b?*011)| = |b?*011| + 1          if addition does not increase M by 1
-        |f(f(b?*011))| = |b?*011|           if adding does not propagate.
-        f(f(b?*011)) = b?*101               next step is to apply c) to this pattern
-
-c)      |f(f(f(f(b?*101))))| = |?*101| - 2  if ?* contains at least one zero before HSB. 
-        C(f(b?*101)) = 1                    if ?* == 1*
-
-d.a)    |f(f(?*111))| = |?*111|             if the fifth bit of the 3r is not set.
-         f(f(b?*111)) = b?*1?11
-
-d.a.i)  If ? in result is 0, the pattern is b?*1011 and the next step is b).
-
-d.a.ii) If ? in result is 1, the pattern is b?*1111.
-        |f(f(f(f(b?*1111))))| = |b?*1111|
-          f(f(f(f(b?*1111)))) = b?*0011          next step is b).
-
-d.b)  |f(f(b?*111))| = |b?*111| + 1
-        f(f(b?*111)) = b10*?11
-
-d.b.i) |C(f(f(f(b?*111))), 4)| = |b?*111| - 2
-
-d.b.ii) the algorithm stops at 1 or the magnitude is reduced by three in total.
-```
 
 Conclusion
 ----------
